@@ -64,7 +64,7 @@ void gj::Win32Console::main() {
               mb = false;
             } else {
               CalcChar(*c, *cb, *tb);
-              mb = (*tb & 0x80);
+              mb = *tb > UINT8_MAX;
             }
             ++cb, ++tb, ++c;
           }

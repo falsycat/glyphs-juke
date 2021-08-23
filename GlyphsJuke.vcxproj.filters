@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\thirdparty">
+      <UniqueIdentifier>{116a3690-393e-42ef-9dd3-935486b59155}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cc">
@@ -44,13 +47,34 @@
     <ClInclude Include="Win32Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\linalg.h">
+      <Filter>Header Files\thirdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\stb_truetype.h">
+      <Filter>Header Files\thirdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="iDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iWritable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-#include "stb_truetype.h"
+#include "thirdparty/stb_truetype.h"
 
 #include "common.h"
 #include "iAllocator.h"

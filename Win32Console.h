@@ -6,7 +6,9 @@
 #include <thread>
 #include <vector>
 
+#define NOMINMAX
 #include <windows.h>
+#undef NOMINMAX
 
 #include "iConsole.h"
 
@@ -14,7 +16,7 @@
 namespace gj {
 
 
-class Win32Console : iConsole {
+class Win32Console : public iConsole {
  public:
   Win32Console() = delete;
   Win32Console(Win32Console&&) = delete;
