@@ -8,8 +8,8 @@
 namespace gj {
 
 
-using mat4 = ::linalg::mat<double, 4, 4>;
-using vec4 = ::linalg::vec<double, 4>;
+using mat3 = ::linalg::mat<double, 3, 3>;
+using vec3 = ::linalg::vec<double, 3>;
 
 class iDrawable {
  public:
@@ -36,15 +36,17 @@ class DrawableBase : public iDrawable {
   DrawableBase& operator=(DrawableBase&&) = default;
   DrawableBase& operator=(const DrawableBase&) = default;
 
-  void setMatrix(const mat4& m) {
-    setMatrix(mat4(m));
+  void SetMatrix(const mat3& m) {
+    SetMatrix(mat3(m));
   }
-  void setMatrix(mat4&& m) {
-    mat_ = std::move(m);
+  void SetMatrix(mat3&& m) {
+    mat_    = std::move(m);
+    invmat_ = ::linalg::inverse(mat_);
   }
 
  protected:
-  mat4 mat_ = ::linalg::identity;
+  mat3 mat_    = ::linalg::identity;
+  mat3 invmat_ = ::linalg::identity;
 };
 
 

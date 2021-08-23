@@ -34,7 +34,7 @@ class Logger : public iWritable, public iLogger {
       lines_.erase(lines_.begin());
       --n;
       for (size_t i = 0; i < n; ++i) {
-        lines_[i].SetPosition(0, i);
+        lines_[i].SetPosition(0, static_cast<int32_t>(i));
       }
     }
 

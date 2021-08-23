@@ -34,11 +34,11 @@ public:
   template <typename T>
   using UniquePtr = std::unique_ptr<T, Deleter<T>>;
 
-  iAllocator(iAllocator&&) = delete;
-  iAllocator(const iAllocator&) = delete;
+  iAllocator(iAllocator&&) = default;
+  iAllocator(const iAllocator&) = default;
 
-  iAllocator& operator=(iAllocator&&) = delete;
-  iAllocator& operator=(const iAllocator&) = delete;
+  iAllocator& operator=(iAllocator&&) = default;
+  iAllocator& operator=(const iAllocator&) = default;
 
   iAllocator() = default;
 

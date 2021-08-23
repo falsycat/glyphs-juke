@@ -53,7 +53,7 @@ class Win32Console : public iConsole {
     SetConsoleScreenBufferInfoEx(screen_, &size);
 
     ShowWindow(win_, FALSE);
-    SetWindowLong(win_, GWL_STYLE, GetWindowLong(win_, GWL_STYLE) & ~WS_SIZEBOX);
+    SetWindowLong(win_, GWL_STYLE, GetWindowLong(win_, GWL_STYLE) & ~(WS_SIZEBOX | WS_MAXIMIZEBOX));
   }
   ~Win32Console() {
     alive_.store(false);

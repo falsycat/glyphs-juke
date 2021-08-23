@@ -54,7 +54,7 @@ namespace gj {
 
     for (int y = 0; y < h; ++y) {
       for (int x = 0; x < w; ++x) {
-        *dst = *src*1./UINT8_MAX;
+        *dst = static_cast<float>(*src*1./UINT8_MAX);
         ++dst, ++src;
       }
     }

@@ -24,8 +24,7 @@ int main() {
   gj::Win32Console console(&alloc, kWidth, kHeight);
   console.Show();
 
-  gj::Game game(kWidth, kHeight);
-
+  gj::Game game(&alloc, kWidth, kHeight);
   while (true) {
     game.Update();
     {
@@ -40,6 +39,6 @@ int main() {
       game.Write(fb);
       console.SwapTextbuffer();
     }
-    Sleep(100);
+    Sleep(10);
   }
 }
