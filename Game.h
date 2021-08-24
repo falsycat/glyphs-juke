@@ -6,6 +6,8 @@
 #include "iDrawable.h"
 #include "iWritable.h"
 #include "Logger.h"
+#include "OffsetClock.h"
+#include "SystemClock.h"
 #include "Texture.h"
 
 
@@ -22,7 +24,8 @@ class Game : public iDrawable, public iWritable {
   Game& operator=(const Game&) = delete;
 
   Game(iAllocator* alloc, uint32_t w, uint32_t h) :
-      alloc_(alloc), w_(w), h_(h), logger_(h), test_(Colorbuffer(alloc, 1, 1)) {
+      alloc_(alloc), uptime_(&SystemClock::instance()),
+      w_(w), h_(h), logger_(h), test_(Colorbuffer(alloc, 1, 1)) {
     Colorbuffer temp(alloc_, 5, 5);
     float* ptr = temp.ptr();
     for (size_t i = 0; i < 25; ++i) ptr[i] = i%2*.3+.7;
@@ -30,11 +33,10 @@ class Game : public iDrawable, public iWritable {
   }
 
   void Update() {
-    static int i = 0;
-    ++i;
-    if (i%100 == 0) logger_.Print(L"すべての人類は死滅する: "+std::to_wstring(i));
+    const uint64_t i = uptime_.now();
+    if (i%1000 == 0) logger_.Print(L"すべての人類は死滅する: "+std::to_wstring(i));
 
-    double t = i%200/200.;
+    double t = i%2000/2000.;
     t = 1 - t;
 
     mat3 m = mat3{ {.2, 0, 0},{0, .2, 0},{0, 0, 1} };
@@ -55,6 +57,7 @@ class Game : public iDrawable, public iWritable {
 
  private:
   iAllocator* alloc_;
+  OffsetClock uptime_;
 
   uint32_t w_, h_;
   Logger logger_;

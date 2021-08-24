@@ -150,13 +150,16 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="iDrawable.h" />
     <ClInclude Include="iLogger.h" />
+    <ClInclude Include="iClock.h" />
     <ClInclude Include="iWritable.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="OffsetClock.h" />
     <ClInclude Include="Rasterbuffer.h" />
     <ClInclude Include="iConsole.h" />
     <ClInclude Include="iAllocator.h" />
     <ClInclude Include="LinearAllocator.h" />
     <ClInclude Include="StackAllocator.h" />
+    <ClInclude Include="SystemClock.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="thirdparty\linalg.h" />
