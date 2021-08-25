@@ -13,7 +13,7 @@ namespace gj {
 class StackAllocator : public iAllocator {
 public:
   using iAllocator::Alloc;
-  using iAllocator::MakeUnique;
+  using iAllocator::MakeUniq;
 
   StackAllocator() = delete;
   StackAllocator(StackAllocator&&) = delete;

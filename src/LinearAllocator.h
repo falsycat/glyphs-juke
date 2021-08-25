@@ -14,7 +14,7 @@ namespace gj {
 class LinearAllocator : public iAllocator {
 public:
   using iAllocator::Alloc;
-  using iAllocator::MakeUnique;
+  using iAllocator::MakeUniq;
 
   LinearAllocator() = delete;
   LinearAllocator(LinearAllocator&&) = delete;

@@ -117,11 +117,17 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -140,31 +146,57 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Font.cc" />
-    <ClCompile Include="main.cc" />
-    <ClCompile Include="Win32Console.cc" />
+    <ClCompile Include="src\Font.cc" />
+    <ClCompile Include="src\Game.cc" />
+    <ClCompile Include="src\Lua.cc" />
+    <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\PlayScene.cc" />
+    <ClCompile Include="src\Texture.cc" />
+    <ClCompile Include="src\Win32Console.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="common.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="iDrawable.h" />
-    <ClInclude Include="iLogger.h" />
-    <ClInclude Include="iClock.h" />
-    <ClInclude Include="iWritable.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="OffsetClock.h" />
-    <ClInclude Include="Rasterbuffer.h" />
-    <ClInclude Include="iConsole.h" />
-    <ClInclude Include="iAllocator.h" />
-    <ClInclude Include="LinearAllocator.h" />
-    <ClInclude Include="StackAllocator.h" />
-    <ClInclude Include="SystemClock.h" />
-    <ClInclude Include="Text.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="src\common.h" />
+    <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\iDrawable.h" />
+    <ClInclude Include="src\iElement.h" />
+    <ClInclude Include="src\iElementDriver.h" />
+    <ClInclude Include="src\iElementFactory.h" />
+    <ClInclude Include="src\iLogger.h" />
+    <ClInclude Include="src\iClock.h" />
+    <ClInclude Include="src\iScene.h" />
+    <ClInclude Include="src\iWritable.h" />
+    <ClInclude Include="src\Logger.h" />
+    <ClInclude Include="src\Lua.h" />
+    <ClInclude Include="src\OffsetClock.h" />
+    <ClInclude Include="src\Period.h" />
+    <ClInclude Include="src\PlayScene.h" />
+    <ClInclude Include="src\Rasterbuffer.h" />
+    <ClInclude Include="src\iConsole.h" />
+    <ClInclude Include="src\iAllocator.h" />
+    <ClInclude Include="src\LinearAllocator.h" />
+    <ClInclude Include="src\Frame.h" />
+    <ClInclude Include="src\StackAllocator.h" />
+    <ClInclude Include="src\SystemClock.h" />
+    <ClInclude Include="src\Text.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\TickingClock.h" />
+    <ClInclude Include="thirdparty\lauxlib.h" />
     <ClInclude Include="thirdparty\linalg.h" />
+    <ClInclude Include="thirdparty\lua.h" />
+    <ClInclude Include="thirdparty\lua.hpp" />
+    <ClInclude Include="thirdparty\luaconf.h" />
+    <ClInclude Include="thirdparty\lualib.h" />
     <ClInclude Include="thirdparty\stb_truetype.h" />
-    <ClInclude Include="Win32Console.h" />
+    <ClInclude Include="src\Win32Console.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="thirdparty\lua5.1.dll">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="thirdparty\lua5.1.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

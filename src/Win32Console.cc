@@ -18,7 +18,7 @@ static void CalcChar(CHAR_INFO& c, float color, uint16_t text) {
   constexpr size_t reso = char_expr_count*attr_expr_count;
 
   /* post effect */
-  color = std::pow(color, 1.9);
+  color = static_cast<float>(std::pow(color, 1.9));
 
   int8_t a = static_cast<int8_t>(color*reso);
   if (a >= reso) a = reso-1;

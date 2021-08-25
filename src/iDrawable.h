@@ -1,15 +1,11 @@
 #pragma once
 
-#include "thirdparty/linalg.h"
-
+#include "common.h"
 #include "Rasterbuffer.h"
 
 
 namespace gj {
 
-
-using mat3 = ::linalg::mat<double, 3, 3>;
-using vec3 = ::linalg::vec<double, 3>;
 
 class iDrawable {
  public:

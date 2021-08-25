@@ -9,6 +9,7 @@
 #include "Font.h"
 #include "Game.h"
 #include "LinearAllocator.h"
+#include "SystemClock.h"
 #include "Win32Console.h"
 
 
@@ -24,7 +25,12 @@ int main() {
   gj::Win32Console console(&alloc, kWidth, kHeight);
   console.Show();
 
-  gj::Game game(&alloc, kWidth, kHeight);
+  gj::Game::Param param;
+  param.alloc = &alloc;
+  param.clock = &gj::SystemClock::instance();
+  param.w     = kWidth;
+  param.h     = kHeight;
+  gj::Game game(std::move(param));
   while (true) {
     game.Update();
     {

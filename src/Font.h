@@ -33,7 +33,7 @@ namespace gj {
     const size_t size = ifs.tellg();
     ifs.seekg(0);
 
-    buf_ = alloc_->MakeUniqueArray<uint8_t>(size);
+    buf_ = alloc_->MakeUniqArray<uint8_t>(size);
     ifs.read(reinterpret_cast<char*>(buf_.get()), size);
 
     const int offset = stbtt_GetFontOffsetForIndex(buf_.get(), 0);
@@ -66,7 +66,7 @@ namespace gj {
 
   stbtt_fontinfo stb_;
 
-  iAllocator::UniquePtr<uint8_t> buf_;
+  UniqPtr<uint8_t> buf_;
 };
 
 

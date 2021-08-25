@@ -32,7 +32,7 @@ public:
   };
 
   template <typename T>
-  using UniquePtr = std::unique_ptr<T, Deleter<T>>;
+  using UniqPtr = std::unique_ptr<T, iAllocator::Deleter<T>>;
 
   iAllocator(iAllocator&&) = default;
   iAllocator(const iAllocator&) = default;
@@ -53,16 +53,24 @@ public:
   }
 
   template <typename T, typename... Args>
-  UniquePtr<T> MakeUnique(Args&&... args) {
+  UniqPtr<T> MakeUniq(Args&&... args) {
     T* ptr = Alloc<T>();
-    return std::unique_ptr<T, Deleter<T>>(new(ptr) T(args...), Deleter<T>(this));
+    return std::unique_ptr<T, Deleter<T>>(new(ptr) T(std::forward<Args>(args)...), Deleter<T>(this));
+  }
+  template <typename I, typename T, typename... Args>
+  UniqPtr<I> MakeUniq(Args&&... args) {
+    T* ptr = Alloc<T>();
+    return std::unique_ptr<I, Deleter<I>>(new(ptr) T(std::forward<Args>(args)...), Deleter<I>(this));
   }
   template <typename T>
-  UniquePtr<T> MakeUniqueArray(size_t n) {
+  UniqPtr<T> MakeUniqArray(size_t n) {
     T* ptr = Alloc<T>(n);
     return std::unique_ptr<T, Deleter<T>>(ptr, Deleter<T>(this));
   }
 };
+
+template <typename T>
+using UniqPtr = iAllocator::UniqPtr<T>;
 
 
 }
