@@ -1,5 +1,7 @@
 #pragma once
 
+
+#include "ElementStore.h"
 #include "Frame.h"
 #include "iAllocator.h"
 #include "iLogger.h"
@@ -33,6 +35,10 @@ class PlayScene : public iScene {
   PlayScene(Param&& p);
 
   UniqPtr<iScene> Update(Frame& f) override {
+    if (store_.IsEmpty()) {
+      /* TODO create and return next scene */
+    }
+    store_.Update(f);
     return nullptr;
   }
 
@@ -44,6 +50,7 @@ class PlayScene : public iScene {
 
   OffsetClock clock_;
 
+  ElementStore store_;
   UniqPtr<Lua> lua_;
 };
 

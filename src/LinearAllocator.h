@@ -76,6 +76,9 @@ public:
 
     hprev->next += h->next;
     hnext->prev += h->prev;
+
+    // chaos test
+    // std::memset(h, 0xFF, h->next);
   }
 
  private:

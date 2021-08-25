@@ -72,7 +72,7 @@ void gj::Texture::Draw(Colorbuffer& fb) const {
       if (std::abs(xf) > 1 || std::abs(yf) > 1) continue;
 
       int32_t srcx = static_cast<int32_t>((xf+1)/2 * srcw);
-      int32_t srcy = srch - 1 - static_cast<int32_t>((yf+1)/2 * srch);
+      int32_t srcy = static_cast<int32_t>((yf+1)/2 * srch);
       if (srcx >= srcw) srcx = srcw - 1;
       if (srcy >= srch) srcy = srch - 1;
 
@@ -81,7 +81,7 @@ void gj::Texture::Draw(Colorbuffer& fb) const {
       if (dstx < 0 || w <= dstx) continue;
       if (dsty < 0 || h <= dsty) continue;
 
-      dst[dstx + w*dsty] = src[srcx + srcw*srcy];
+      dst[dstx + w*dsty] = src[srcx + srcw*srcy] * alpha_;
     }
   }
 }

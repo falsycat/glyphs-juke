@@ -9,16 +9,19 @@ namespace gj {
 
 class iElement {
  public:
+  iElement() = delete;
   iElement(iElement&&) = default;
   iElement(const iElement&) = default;
 
   iElement& operator=(iElement&&) = default;
   iElement& operator=(const iElement&) = default;
 
-  iElement() = default;
   virtual ~iElement() = default;
 
-  virtual void Update(Frame& f) = 0;
+  iElement(const Period& p) : period(p) {
+  }
+
+  virtual void Update(Frame& frame, double t) = 0;
 
   /* Interfaces had better not have a variable but this is for optimization. */
   const Period period;

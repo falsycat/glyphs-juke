@@ -8,6 +8,7 @@
 #include "common.h"
 #include "iAllocator.h"
 #include "iElementFactory.h"
+#include "ElementStore.h"
 
 
 namespace gj {
@@ -24,7 +25,7 @@ class Lua {
   Lua& operator=(Lua&&) = delete;
   Lua& operator=(const Lua&) = delete;
 
-  Lua(iAllocator* alloc, const FactoryMap& factory, const std::string& path);
+  Lua(iAllocator* alloc, ElementStore* store, const FactoryMap& factory, const std::string& path);
 
   ~Lua() {
     lua_close(L);

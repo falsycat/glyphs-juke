@@ -1,8 +1,7 @@
 #pragma once
 
-#include <codecvt>
+#include <cstdint>
 #include <cstdlib>
-#include <sstream>
 #include <string>
 
 #define NOMINMAX
@@ -10,6 +9,7 @@
 #undef NOMINMAX
 
 #include "thirdparty/linalg.h"
+#include "thirdparty/utf8.h"
 
 namespace gj {
 
@@ -19,9 +19,15 @@ using vec3 = ::linalg::vec<double, 3>;
 
 
 static inline std::wstring ConvertUtf8ToUtf16(const std::string& str) {
-  std::wostringstream conv;
-  conv << str.c_str();
-  return conv.str();
+  std::wstring ret;
+
+  const void* c = str.c_str();
+  for (;;) {
+    int32_t code;
+    c = utf8codepoint(c, &code);
+    if (!code) return ret;
+    ret += static_cast<wchar_t>(code);
+  }
 }
 
 

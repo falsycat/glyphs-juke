@@ -40,9 +40,15 @@ class DrawableBase : public iDrawable {
     invmat_ = ::linalg::inverse(mat_);
   }
 
+  void SetAlpha(float a) {
+    alpha_ = a;
+  }
+
  protected:
   mat3 mat_    = ::linalg::identity;
   mat3 invmat_ = ::linalg::identity;
+
+  float alpha_ = 1;
 };
 
 

@@ -156,8 +156,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common.h" />
+    <ClInclude Include="src\ElementStore.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\GlyphElementFactory.h" />
     <ClInclude Include="src\iDrawable.h" />
     <ClInclude Include="src\iElement.h" />
     <ClInclude Include="src\iElementDriver.h" />
@@ -180,6 +182,7 @@
     <ClInclude Include="src\SystemClock.h" />
     <ClInclude Include="src\Text.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\TextureElement.h" />
     <ClInclude Include="src\TickingClock.h" />
     <ClInclude Include="thirdparty\lauxlib.h" />
     <ClInclude Include="thirdparty\linalg.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="thirdparty\lualib.h" />
     <ClInclude Include="thirdparty\stb_truetype.h" />
     <ClInclude Include="src\Win32Console.h" />
+    <ClInclude Include="thirdparty\utf8.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="thirdparty\lua5.1.dll">

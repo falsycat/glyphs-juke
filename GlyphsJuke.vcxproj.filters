@@ -33,10 +33,10 @@
     <ClCompile Include="src\Game.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlayScene.cc">
+    <ClCompile Include="src\Lua.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua.cc">
+    <ClCompile Include="src\PlayScene.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -141,6 +141,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\iElementDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlyphElementFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ElementStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\utf8.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

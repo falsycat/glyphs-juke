@@ -7,13 +7,17 @@ namespace gj {
 
 struct Period {
  public:
-  Period() = delete;
-
+  Period() : Period(0, 0) {
+  }
   Period(uint64_t st, uint64_t ed) : start(st), end(ed) {
     assert(st <= ed);
   }
 
-  bool isHit(uint64_t now) const {
+  double Normalize(uint64_t now) const {
+    return (static_cast<int64_t>(now) - start)*1./duration();
+  }
+
+  bool IsHit(uint64_t now) const {
     return start <= now && now < end;
   }
 

@@ -1,6 +1,45 @@
 #include "Lua.h"
 
 
+struct LuaPusher {
+  LuaPusher() = delete;
+  LuaPusher(lua_State* L) : L(L) {
+  }
+
+  void operator()(int64_t v) {
+    lua_pushinteger(L, v);
+  }
+  void operator()(double v) {
+    lua_pushnumber(L, v);
+  }
+  void operator()(const std::string& v) {
+    lua_pushstring(L, v.c_str());
+  }
+
+ private:
+  lua_State* L;
+};
+struct LuaTaker {
+  LuaTaker() = delete;
+  LuaTaker(lua_State* L, int index) : L(L), index_(index) {
+  }
+
+  void operator()(int64_t& v) {
+    v = luaL_checkinteger(L, index_);
+  }
+  void operator()(double& v) {
+    v = luaL_checknumber(L, index_);
+  }
+  void operator()(std::string& v) {
+    v = luaL_checkstring(L, index_);
+  }
+
+ private:
+  lua_State* L;
+  int index_;
+};
+
+
 class LuaFunc : public gj::iElementDriver {
  public:
   LuaFunc() = delete;
@@ -10,7 +49,8 @@ class LuaFunc : public gj::iElementDriver {
   LuaFunc& operator=(LuaFunc&&) = delete;
   LuaFunc& operator=(const LuaFunc&) = delete;
 
-  LuaFunc(lua_State* L) : L(L) {
+  LuaFunc(lua_State* L, int index) : L(L) {
+    lua_pushvalue(L, index);
     func_ = luaL_ref(L, LUA_REGISTRYINDEX);
 
     lua_createtable(L, 0, 0);
@@ -20,26 +60,19 @@ class LuaFunc : public gj::iElementDriver {
     luaL_unref(L, LUA_REGISTRYINDEX, func_);
   }
 
-  void Update(Param& param) override {
+  void Update(Param& param, double t) override {
     lua_rawgeti(L, LUA_REGISTRYINDEX, func_);
+
+    lua_pushnumber(L, t);
 
     lua_rawgeti(L, LUA_REGISTRYINDEX, table_);
     for (const auto& p : param) {
       lua_pushstring(L, p.first.c_str());
-      if (std::holds_alternative<int64_t>(p.second)) {
-        lua_pushinteger(L, std::get<int64_t>(p.second));
-      } else if (std::holds_alternative<double>(p.second)) {
-        lua_pushnumber(L, std::get<double>(p.second));
-      } else if (std::holds_alternative<std::string>(p.second)) {
-        const std::string str = std::get<std::string>(p.second);
-        lua_pushstring(L, str.c_str());
-      } else {
-        assert(false);
-      }
+      std::visit(LuaPusher(L), p.second);
       lua_rawset(L, -3);
     }
 
-    const int ret = lua_pcall(L, 1, 0, 0);
+    const int ret = lua_pcall(L, 2, 0, 0);
     if (ret) {
       gj::Abort(std::string("Lua error: ")+lua_tostring(L, -1));
     }
@@ -48,16 +81,7 @@ class LuaFunc : public gj::iElementDriver {
     for (auto& p : param) {
       lua_pushstring(L, p.first.c_str());
       lua_rawget(L, -2);
-
-      if (std::holds_alternative<int64_t>(p.second)) {
-        p.second = luaL_checkinteger(L, -1);
-      } else if (std::holds_alternative<double>(p.second)) {
-        p.second = luaL_checknumber(L, -1);
-      } else if (std::holds_alternative<std::string>(p.second)) {
-        p.second = luaL_checkstring(L, -1);
-      } else {
-        assert(false);
-      }
+      std::visit(LuaTaker(L, -1), p.second);
       lua_pop(L, 1);
     }
     lua_pop(L, 1);
@@ -74,25 +98,46 @@ class LuaFunc : public gj::iElementDriver {
 static int CallFactory_(lua_State* L) {
   gj::iAllocator* alloc =
     reinterpret_cast<gj::iAllocator*>(lua_touserdata(L, lua_upvalueindex(1)));
+  gj::ElementStore* store =
+    reinterpret_cast<gj::ElementStore*>(lua_touserdata(L, lua_upvalueindex(2)));
   gj::iElementFactory* factory =
-    reinterpret_cast<gj::iElementFactory*>(lua_touserdata(L, lua_upvalueindex(2)));
+    reinterpret_cast<gj::iElementFactory*>(lua_touserdata(L, lua_upvalueindex(3)));
+
+  const int n = lua_gettop(L);
 
   const lua_Integer st = luaL_checkinteger(L, 1);
   const lua_Integer ed = luaL_checkinteger(L, 2);
   if (st >= ed) {
     return luaL_error(L, "invalid period");
   }
-  if (!lua_isfunction(L, 3)) {
+  if (!lua_isfunction(L, n)) {
     return luaL_error(L, "no driver specified");
   }
 
-  lua_pushvalue(L, 3);
-  factory->Create(gj::Period(st, ed), alloc->MakeUniq<gj::iElementDriver, LuaFunc>(L));
+  gj::iElementFactory::Param param;
+  param.period = gj::Period(st, ed);
+  param.driver = alloc->MakeUniq<gj::iElementDriver, LuaFunc>(L, n);
+
+  for (int i = 3; i < n; ++i) {
+    gj::iElementFactory::Param::CustomValue v;
+    if (lua_isnumber(L, i)) {
+      v = lua_tonumber(L, i);
+    } else if (lua_isstring(L, i)) {
+      v = lua_tostring(L, i);
+    } else {
+      return luaL_error(L, "invalid args");
+    }
+    param.custom.push_back(v);
+  }
+
+  auto e = factory->Create(std::move(param));
+  if (!e) return luaL_error(L, "factory returned nullptr");
+  store->Schedule(std::move(e));
   return 0;
 }
 
 
-gj::Lua::Lua(iAllocator* alloc, const FactoryMap& factory, const std::string& path) {
+gj::Lua::Lua(iAllocator* alloc, ElementStore* store, const FactoryMap& factory, const std::string& path) {
   L = luaL_newstate();
   if (L == nullptr) {
     Abort("lua_newstate failure");
@@ -102,8 +147,9 @@ gj::Lua::Lua(iAllocator* alloc, const FactoryMap& factory, const std::string& pa
     lua_pushstring(L, f.first.c_str());
 
     lua_pushlightuserdata(L, alloc);
+    lua_pushlightuserdata(L, store);
     lua_pushlightuserdata(L, f.second);
-    lua_pushcclosure(L, CallFactory_, 2);
+    lua_pushcclosure(L, CallFactory_, 3);
 
     lua_rawset(L, LUA_GLOBALSINDEX);
   }
