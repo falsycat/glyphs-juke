@@ -19,7 +19,7 @@ class Frame : public iDrawable, public iWritable {
   Frame& operator=(Frame&&) = delete;
   Frame& operator=(const Frame&) = delete;
 
-  Frame(size_t dres, size_t wres) {
+  Frame(uint32_t w, uint32_t h, size_t dres, size_t wres) : w(w), h(h) {
     draw_.reserve(dres);
     write_.reserve(wres);
   }
@@ -48,6 +48,8 @@ class Frame : public iDrawable, public iWritable {
   }
 
   std::string input;
+
+  uint32_t w, h;
 
  private:
   std::vector<const iDrawable*> draw_;

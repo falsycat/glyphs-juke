@@ -30,6 +30,14 @@ static inline std::wstring ConvertStrToWstr(const std::string& str) {
   }
 }
 
+static inline size_t CountWstrBytes(const std::wstring& str) {
+  size_t n = 0;
+  for (const auto c : str) {
+    n += c > UINT8_MAX? 2: 1;
+  }
+  return n;
+}
+
 
 [[noreturn]]
 static inline void Abort(const std::string& msg) {
