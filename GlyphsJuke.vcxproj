@@ -182,6 +182,7 @@
     <ClInclude Include="src\iAllocator.h" />
     <ClInclude Include="src\LinearAllocator.h" />
     <ClInclude Include="src\Frame.h" />
+    <ClInclude Include="src\Scoreboard.h" />
     <ClInclude Include="src\StackAllocator.h" />
     <ClInclude Include="src\SystemClock.h" />
     <ClInclude Include="src\Text.h" />

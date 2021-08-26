@@ -6,6 +6,7 @@
 #include "iElement.h"
 #include "iElementDriver.h"
 #include "iInputMatcher.h"
+#include "Scoreboard.h"
 #include "Text.h"
 
 namespace gj {
@@ -16,6 +17,8 @@ class InputWindowElement : public iElement {
   struct Param {
     UniqPtr<iInputMatcher>  matcher;
     UniqPtr<iElementDriver> driver;
+
+    Scoreboard* scoreboard;
 
     Period period;
 
@@ -31,7 +34,7 @@ class InputWindowElement : public iElement {
 
   InputWindowElement(Param&& p) :
       iElement(p.period),
-      matcher_(std::move(p.matcher)), drv_(std::move(p.driver)),
+      matcher_(std::move(p.matcher)), drv_(std::move(p.driver)), sb_(p.scoreboard),
       text_(p.text), guide_(matcher_->expects()), width_(CountWstrBytes(p.text)) {
     param_["posX"]  = 0.;
     param_["posY"]  = 0.;
@@ -43,7 +46,11 @@ class InputWindowElement : public iElement {
       if (matcher_->done()) break;
       if (matcher_->Input(c)) {
         guide_ = Text(matcher_->expects());
+        ++sb_->correct;
+      } else {
+        ++sb_->miss;
       }
+      ++sb_->input;
     }
     drv_->Update(param_, t);
 
@@ -62,12 +69,17 @@ class InputWindowElement : public iElement {
   }
 
   void Finalize() override {
-    /* TODO score calculation */
+    ++sb_->lines;
+    if (matcher_->done()) {
+      ++sb_->completeLines;
+    }
   }
 
  private:
   UniqPtr<iInputMatcher>  matcher_;
   UniqPtr<iElementDriver> drv_;
+
+  Scoreboard* sb_;
 
   Text text_;
   Text guide_;

@@ -8,6 +8,7 @@
 #include "iScene.h"
 #include "Lua.h"
 #include "OffsetClock.h"
+#include "Scoreboard.h"
 
 
 namespace gj {
@@ -50,6 +51,7 @@ class PlayScene : public iScene {
 
   OffsetClock clock_;
 
+  Scoreboard   sb_;
   ElementStore store_;
   UniqPtr<Lua> lua_;
 };

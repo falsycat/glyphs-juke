@@ -19,7 +19,7 @@ class InputWindowElementFactory : public iElementFactory {
   InputWindowElementFactory& operator=(InputWindowElementFactory&&) = delete;
   InputWindowElementFactory& operator=(const InputWindowElementFactory&) = delete;
 
-  InputWindowElementFactory(iAllocator* alloc) : alloc_(alloc) {
+  InputWindowElementFactory(iAllocator* alloc, Scoreboard* sb) : alloc_(alloc), sb_(sb) {
   }
 
   UniqPtr<iElement> Create(Param&& param) override {
@@ -29,16 +29,18 @@ class InputWindowElementFactory : public iElementFactory {
     const std::string kana = std::get<std::string>(param.custom[1]);
 
     InputWindowElement::Param p;
-    p.period  = param.period;
-    p.driver  = std::move(param.driver);
-    p.matcher = alloc_->MakeUniq<iInputMatcher, HiraganaMatcher>(ConvertStrToWstr(kana));
-    p.text    = ConvertStrToWstr(text);
+    p.period     = param.period;
+    p.scoreboard = sb_;
+    p.driver     = std::move(param.driver);
+    p.matcher    = alloc_->MakeUniq<iInputMatcher, HiraganaMatcher>(ConvertStrToWstr(kana));
+    p.text       = ConvertStrToWstr(text);
 
     return alloc_->MakeUniq<iElement, InputWindowElement>(std::move(p));
   }
 
  private:
   iAllocator* alloc_;
+  Scoreboard* sb_;
 };
 
 
