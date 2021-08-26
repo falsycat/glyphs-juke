@@ -36,10 +36,12 @@ class Game : public iDrawable, public iWritable {
 
   Game(Param&& p);
 
-  void Update() {
+  void Update(const std::string& input) {
     clock_.Tick();
 
     frame_.Clear();
+    frame_.input = input;
+
     UniqPtr<iScene> next = scene_->Update(frame_);
     if (next) {
       scene_ = std::move(next);

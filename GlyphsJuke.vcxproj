@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="src\Font.cc" />
     <ClCompile Include="src\Game.cc" />
+    <ClCompile Include="src\HiraganaMatcher.cc" />
     <ClCompile Include="src\Lua.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\PlayScene.cc" />
@@ -155,6 +156,8 @@
     <ClCompile Include="src\Win32Console.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\HiraganaMatcher.h" />
+    <ClInclude Include="src\iInputMatcher.h" />
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\ElementStore.h" />
     <ClInclude Include="src\Font.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="src\iElementFactory.h" />
     <ClInclude Include="src\iLogger.h" />
     <ClInclude Include="src\iClock.h" />
+    <ClInclude Include="src\InputWindowElementFactory.h" />
     <ClInclude Include="src\iScene.h" />
     <ClInclude Include="src\iWritable.h" />
     <ClInclude Include="src\Logger.h" />
@@ -181,6 +185,7 @@
     <ClInclude Include="src\StackAllocator.h" />
     <ClInclude Include="src\SystemClock.h" />
     <ClInclude Include="src\Text.h" />
+    <ClInclude Include="src\InputWindowElement.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\TextureElement.h" />
     <ClInclude Include="src\TickingClock.h" />

@@ -30,7 +30,7 @@ class GlyphElementFactory : public iElementFactory {
     const intmax_t    size = std::get<double>(param.custom[2]);
 
     auto& font = FindOrCreateFont(name);
-    auto  tex  = std::move(font.RenderGlyphs(ConvertUtf8ToUtf16(text), size));  /* TODO */
+    auto  tex  = std::move(font.RenderGlyphs(ConvertStrToWstr(text), size));  /* TODO */
 
     return alloc_->MakeUniq<iElement, TextureElement>(
       param.period, std::move(tex), std::move(param.driver));

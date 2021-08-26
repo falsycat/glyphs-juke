@@ -32,7 +32,7 @@ int main() {
   param.h     = kHeight;
   gj::Game game(std::move(param));
   while (true) {
-    game.Update();
+    game.Update(console.TakeInput());
     {
       auto& fb = console.TakeColorbuffer();
       fb.Clear();

@@ -53,6 +53,7 @@ class ElementStore {
     for (auto& eptr : performing_) {
       iElement* e = eptr.get();
       if (e->period.end <= now) {
+        e->Finalize();
         eptr = nullptr;
       } else {
         e->Update(frame, e->period.Normalize(now));

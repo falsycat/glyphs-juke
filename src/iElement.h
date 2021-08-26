@@ -23,6 +23,8 @@ class iElement {
 
   virtual void Update(Frame& frame, double t) = 0;
 
+  virtual void Finalize() = 0;
+
   /* Interfaces had better not have a variable but this is for optimization. */
   const Period period;
 };

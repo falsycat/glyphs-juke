@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "iDrawable.h"
@@ -45,6 +46,8 @@ class Frame : public iDrawable, public iWritable {
       w->Write(fb);
     }
   }
+
+  std::string input;
 
  private:
   std::vector<const iDrawable*> draw_;

@@ -3,6 +3,7 @@
 #include <atomic>
 #include <cstdint>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -10,6 +11,7 @@
 #include <windows.h>
 #undef NOMINMAX
 
+#include "common.h"
 #include "iConsole.h"
 
 
@@ -32,10 +34,13 @@ class Win32Console : public iConsole {
       tb_main_(alloc, w, h), tb_sub_(alloc, w, h),
       chars_(std::make_unique<CHAR_INFO[]>(static_cast<uint64_t>(w)*h)),
       win_(GetConsoleWindow()) {
-    _ASSERT(win_);
+    if (!win_) gj::Abort("GetConsoleWindow returned nullptr");
 
     screen_ = GetStdHandle(STD_OUTPUT_HANDLE);
-    _ASSERT(screen_ != INVALID_HANDLE_VALUE);
+    buffer_ = GetStdHandle(STD_INPUT_HANDLE);
+    if (screen_ == INVALID_HANDLE_VALUE || buffer_ == INVALID_HANDLE_VALUE) {
+      gj::Abort("GetStdHandle returned nullptr");
+    }
 
     CONSOLE_SCREEN_BUFFER_INFOEX size;
     size.cbSize = sizeof(size);
@@ -83,6 +88,13 @@ class Win32Console : public iConsole {
     std::swap(tb_main_, tb_sub_);
   }
 
+  std::string TakeInput() override {
+    std::lock_guard<std::mutex> _(mtx_);
+    std::string ret = std::move(input_);
+    input_ = "";
+    return ret;
+  }
+
   uint32_t width() const override {
     return w_;
   }
@@ -107,7 +119,10 @@ class Win32Console : public iConsole {
   std::unique_ptr<CHAR_INFO[]> chars_;
 
   HANDLE screen_ = INVALID_HANDLE_VALUE;
+  HANDLE buffer_ = INVALID_HANDLE_VALUE;
   HWND   win_    = nullptr;
+
+  std::string input_;
 
   void main();
 };

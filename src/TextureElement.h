@@ -44,6 +44,9 @@ public:
     frame.Add(&tex_);
   }
 
+  void Finalize() override {
+  }
+
  private:
   Texture tex_;
   UniqPtr<iElementDriver> drv_;

@@ -47,6 +47,35 @@ void gj::Win32Console::main() {
       constexpr CONSOLE_CURSOR_INFO cursor{ 1, FALSE };
       SetConsoleCursorInfo(screen_, &cursor);
 
+      /* read input */
+      {  /* critical section */
+        std::lock_guard<std::mutex> _(mtx_);
+
+        INPUT_RECORD input[256];
+        DWORD input_n;
+        PeekConsoleInput(buffer_, input, 256, &input_n);
+        if (input_n) {
+          /*  Peek* can retrieve the input but doesn't remove it from the buffer
+           * so calls Read* to clear. */
+          ReadConsoleInput(buffer_, input, 256, &input_n);
+        }
+        for (DWORD i = 0; i < input_n; ++i) {
+          const auto& rec = input[i];
+          switch (rec.EventType) {
+          case KEY_EVENT:
+            if (rec.Event.KeyEvent.bKeyDown) {
+              input_ += rec.Event.KeyEvent.uChar.AsciiChar;
+            }
+            break;
+          default:
+            break;
+          }
+        }
+      }
+
+
+
+      /* write output */
       CHAR_INFO* c = chars_.get();
       {  /* critical section */
         std::lock_guard<std::mutex> _(mtx_);

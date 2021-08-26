@@ -26,6 +26,8 @@ class iConsole {
   virtual Textbuffer& TakeTextbuffer() = 0;
   virtual void SwapTextbuffer() = 0;
 
+  virtual std::string TakeInput() = 0;
+
   virtual uint32_t width()  const = 0;
   virtual uint32_t height() const = 0;
 };

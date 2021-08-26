@@ -18,7 +18,7 @@ using mat3 = ::linalg::mat<double, 3, 3>;
 using vec3 = ::linalg::vec<double, 3>;
 
 
-static inline std::wstring ConvertUtf8ToUtf16(const std::string& str) {
+static inline std::wstring ConvertStrToWstr(const std::string& str) {
   std::wstring ret;
 
   const void* c = str.c_str();
@@ -33,7 +33,7 @@ static inline std::wstring ConvertUtf8ToUtf16(const std::string& str) {
 
 [[noreturn]]
 static inline void Abort(const std::string& msg) {
-  MessageBox(NULL, ConvertUtf8ToUtf16(msg).c_str(), L"PROGRAM ABORTED", MB_OK);
+  MessageBox(NULL, ConvertStrToWstr(msg).c_str(), L"PROGRAM ABORTED", MB_OK);
   std::exit(1);
 }
 

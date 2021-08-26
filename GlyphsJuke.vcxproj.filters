@@ -39,6 +39,9 @@
     <ClCompile Include="src\PlayScene.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\HiraganaMatcher.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\iConsole.h">
@@ -153,6 +156,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="thirdparty\utf8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputWindowElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iInputMatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HiraganaMatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputWindowElementFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
