@@ -78,7 +78,7 @@ namespace gj {
       const float x_shift = w - (int) w;
       stbtt_GetCodepointBitmapBoxSubpixel(&stb_, c, s, s, x_shift, 0, &x0, &y0, &x1, &y1);
 
-      const int ch = y1 - y0;
+      const int ch = baseline+1;
       if (h < ch) h = static_cast<float>(ch);
 
       w += advance * s;
@@ -97,6 +97,9 @@ namespace gj {
       int x0, y0, x1, y1;
       const float x_shift = x - (int)x;
       stbtt_GetCodepointBitmapBoxSubpixel(&stb_, c, s, s, x_shift, 0, &x0, &y0, &x1, &y1);
+      if (x1 - x0 > 64 || y1 - y0 > 64) {
+        gj::Abort("font size is too huge");
+      }
 
       uint8_t ptr[64][64] = {0};
       stbtt_MakeCodepointBitmapSubpixel(&stb_, &ptr[0][0], x1-x0, y1-y0, 64, s, s, x_shift, 0, c);
@@ -107,7 +110,7 @@ namespace gj {
       const int b = baseline + y1;
       for (int y = 0; y < b-u; ++y) {
         for (int x = 0; x < r-l; ++x) {
-          dst[y*static_cast<int>(w) + l+x] = static_cast<float>(ptr[y][x]*1. / UINT8_MAX);
+          dst[(u+y)*static_cast<int>(w) + l+x] = static_cast<float>(ptr[y][x]*1. / UINT8_MAX);
         }
       }
       x += advance * s;
