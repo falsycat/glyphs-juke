@@ -41,7 +41,6 @@ public:
     const double c = std::cos(rota);
     const double s = std::sin(rota);
     
-    const double aspect = frame.w*1./frame.h;
     auto Ms = mat3{
       { scaleX, 0, 0 },
       { 0, scaleY, 0 },
@@ -52,17 +51,11 @@ public:
       { s,  c, 0, },
       { 0,  0, 1, },
     };
-    auto Mm = mat3{
+    auto M = mat3{
       { 1, 0, 0 },
       { 0, 1, 0 },
       { posX, posY, 1},
     };
-    auto M = mat3{
-      { 1, 0, 0 },
-      { 0, aspect/2, 0 },
-      { 0, 0, 1},
-    };
-    M = ::linalg::mul(M, Mm);
     M = ::linalg::mul(M, Mr);
     M = ::linalg::mul(M, Ms);
 
