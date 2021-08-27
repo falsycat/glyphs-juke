@@ -39,7 +39,7 @@ gj::TitleScene::TitleScene(const Param& p) :
     s.displayName = obj["displayName"].get<std::string>();
     s.music       = obj["music"].get<std::string>();
     s.score       = obj["score"].get<std::string>();
-    s.playOffset  = static_cast<uint64_t>(obj["playOffset"].get<double>());
+    s.playOffset  = obj["playOffset"].get<double>();
 
     list_.push_back(s);
   }
@@ -123,7 +123,7 @@ void gj::TitleScene::SelectScore_(size_t index) {
   score_        = Text(ConvertStrToWstr(s.displayName));
   select_index_ = index;
   
-  param_.audio->SetVolume(.2);
-  param_.audio->SetLpfIntensity(.99);
+  param_.audio->SetVolume(.5);
+  param_.audio->SetLpfIntensity(.999);
   param_.audio->PlayMusic(s.music, s.playOffset);
 }

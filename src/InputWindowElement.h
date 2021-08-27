@@ -35,7 +35,7 @@ class InputWindowElement : public iElement {
   InputWindowElement(Param&& p) :
       iElement(p.period),
       matcher_(std::move(p.matcher)), drv_(std::move(p.driver)), sb_(p.scoreboard),
-      text_(p.text), guide_(matcher_->expects()), width_(CountWstrBytes(p.text)) {
+      text_(p.text), expects_(matcher_->expects()) {
     param_["posX"]  = 0.;
     param_["posY"]  = 0.;
     param_["baseX"] = .5;
@@ -45,10 +45,8 @@ class InputWindowElement : public iElement {
     for (auto c : frame.input) {
       if (matcher_->done()) break;
       if (matcher_->Input(c)) {
-        guide_ = Text(matcher_->expects());
+        expects_ = Text(matcher_->expects());
         ++sb_->correct;
-      } else {
-        ++sb_->miss;
       }
       ++sb_->input;
     }
@@ -60,12 +58,14 @@ class InputWindowElement : public iElement {
 
     const uint32_t posXi  = static_cast<int32_t>(posX * frame.w);
     const uint32_t posYi  = static_cast<int32_t>(posY * frame.h);
-    const uint32_t baseXi = static_cast<int32_t>(baseX * width_);
 
-    text_.SetPosition(posXi-baseXi, posYi);
-    guide_.SetPosition(posXi-baseXi, posYi+1);
+    const uint32_t tbaseXi = static_cast<int32_t>(baseX * text_.width());
+    const uint32_t ebaseXi = static_cast<int32_t>(baseX * expects_.width());
+
+    text_.SetPosition(posXi-tbaseXi, posYi);
+    expects_.SetPosition(posXi-ebaseXi, posYi+1);
     frame.Add(&text_);
-    frame.Add(&guide_);
+    frame.Add(&expects_);
   }
 
   void Finalize() override {
@@ -82,9 +82,7 @@ class InputWindowElement : public iElement {
   Scoreboard* sb_;
 
   Text text_;
-  Text guide_;
-
-  size_t width_;
+  Text expects_;
 
   iElementDriver::Param param_;
 };
