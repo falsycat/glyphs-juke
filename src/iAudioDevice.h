@@ -18,8 +18,11 @@ public:
 
   virtual ~iAudioDevice() = default;
 
-  virtual void PlayMusic(const std::string& path) = 0;
+  virtual void PlayMusic(const std::string& path, double offset) = 0;
   virtual void StopMusic() = 0;
+
+  virtual void SetVolume(double amp) = 0;
+  virtual void SetLpfIntensity(double v) = 0;
 };
 
 

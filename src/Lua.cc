@@ -1,5 +1,7 @@
 #include "Lua.h"
 
+#include "thirdparty/lualib.h"
+
 
 struct LuaPusher {
   LuaPusher() = delete;
@@ -142,6 +144,7 @@ gj::Lua::Lua(iAllocator* alloc, ElementStore* store, const FactoryMap& factory, 
   if (L == nullptr) {
     Abort("lua_newstate failure");
   }
+  luaopen_math(L);
 
   for (const auto& f : factory) {
     lua_pushstring(L, f.first.c_str());

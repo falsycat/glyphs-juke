@@ -32,8 +32,15 @@ class AudioDevice : public iAudioDevice, public iClock {
   AudioDevice();
   ~AudioDevice();
 
-  void PlayMusic(const std::string& path) override;
+  void PlayMusic(const std::string& path, double offset) override;
   void StopMusic() override;
+
+  void SetVolume(double amp) override {
+    amp_.store(amp);
+  }
+  void SetLpfIntensity(double v) override {
+    lpf_coe_.store(v);
+  }
 
   uint64_t now() const override {
     return time_.load() * 1000 / kSampleRate;
@@ -46,6 +53,11 @@ class AudioDevice : public iAudioDevice, public iClock {
 
   bool playing_ = false;
   ma_decoder dec_{0};
+
+  std::atomic<double> amp_ = 1;
+
+  std::atomic<double> lpf_coe_  = 0;
+  float               lpf_prev_ = 0;
 
   std::atomic<uint64_t> time_;
 

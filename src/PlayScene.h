@@ -2,10 +2,6 @@
 
 
 #include "ElementStore.h"
-#include "Frame.h"
-#include "iAllocator.h"
-#include "iAudioDevice.h"
-#include "iLogger.h"
 #include "iScene.h"
 #include "Lua.h"
 #include "OffsetClock.h"
@@ -17,14 +13,6 @@ namespace gj {
 
 class PlayScene : public iScene {
  public:
-  struct Param {
-    iAllocator*   alloc;
-    iAudioDevice* audio;
-    const iClock* clock;
-
-    std::string score;
-  };
-
   PlayScene() = delete;
   PlayScene(PlayScene&&) = delete;
   PlayScene(const PlayScene&) = delete;
@@ -32,13 +20,12 @@ class PlayScene : public iScene {
   PlayScene& operator=(PlayScene&&) = delete;
   PlayScene& operator=(const PlayScene&) = delete;
 
-  PlayScene(Param&& p);
+  PlayScene(const Param& p, const std::string& title, const std::string& path);
 
   UniqPtr<iScene> Update(Frame& f) override;
 
  private:
-  iAllocator*   alloc_;
-  iAudioDevice* audio_;
+  Param param_;
 
   OffsetClock clock_;
 

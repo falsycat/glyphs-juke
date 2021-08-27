@@ -22,11 +22,18 @@ class MusicElementFactory : public iElementFactory {
   }
 
   UniqPtr<iElement> Create(Param&& param) override {
-    if (param.custom.size() != 1) return nullptr;
+    if (param.custom.size() != 2) return nullptr;
 
-    const std::string name = std::get<std::string>(param.custom[0]);
+    const std::string path   = std::get<std::string>(param.custom[0]);
+    const double      offset = std::get<double>(param.custom[1]);
 
-    return alloc_->MakeUniq<iElement, MusicElement>(param.period, audio_, name);
+    MusicElement::Param p;
+    p.audio  = audio_;
+    p.period = param.period;
+    p.path   = path;
+    p.offset = offset;
+    p.driver = std::move(param.driver);
+    return alloc_->MakeUniq<iElement, MusicElement>(std::move(p));
   }
 
  private:

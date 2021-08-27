@@ -1,5 +1,7 @@
 #include "Game.h"
-#include "PlayScene.h"
+
+#include "iScene.h"
+#include "TitleScene.h"
 
 
 gj::Game::Game(gj::Game::Param&& p) :
@@ -8,10 +10,9 @@ gj::Game::Game(gj::Game::Param&& p) :
     logger_(p.h),
     w_(p.w), h_(p.h),
     frame_(p.w, p.h, kReserveDrawable, kReserveWritable) {
-  gj::PlayScene::Param param;
+  gj::iScene::Param param;
   param.alloc = alloc_;
   param.clock = &clock_;
   param.audio = p.audio;
-  param.score = "test";  /* TODO test */
-  scene_ = alloc_->MakeUniq<gj::iScene, gj::PlayScene>(std::move(param));
+  scene_ = alloc_->MakeUniq<gj::iScene, gj::TitleScene>(param);
 }

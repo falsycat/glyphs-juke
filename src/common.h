@@ -17,6 +17,8 @@ namespace gj {
 using mat3 = ::linalg::mat<double, 3, 3>;
 using vec3 = ::linalg::vec<double, 3>;
 
+constexpr double kPi = 3.14159265358979323846264338327950288;
+
 
 static inline std::wstring ConvertStrToWstr(const std::string& str) {
   std::wstring ret;
@@ -36,6 +38,12 @@ static inline size_t CountWstrBytes(const std::wstring& str) {
     n += c > UINT8_MAX? 2: 1;
   }
   return n;
+}
+
+static inline uint64_t XorShift(uint64_t x) {
+  x = x ^ (x << 13);
+  x = x ^ (x >>  7);
+  return x ^ (x << 17);
 }
 
 

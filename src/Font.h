@@ -14,7 +14,7 @@
 namespace gj {
 
 
- class Font {
+class Font {
  public:
   Font() = delete;
   Font(Font&&) = delete;

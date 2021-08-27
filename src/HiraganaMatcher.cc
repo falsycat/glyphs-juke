@@ -189,10 +189,9 @@ bool gj::HiraganaMatcher::Input_(wchar_t c, bool force_cut) {
         if (itr.size() == newbuf.size()) {
           comp_match = i;
           if (force_cut) {
-            buffer_ = {c};
+            buffer_ = L"";
             state_.match += i;
-            UpdateExpects_();
-            return true;
+            return Input_(c, false);
           }
         } else {
           part_match = i;
@@ -248,6 +247,8 @@ void gj::HiraganaMatcher::UpdateExpects_() {
       }
       remain = remain.substr(len);
     }
-    if (prev == remain.size()) Abort("invalid pattern for InputWin");
+    if (prev == remain.size()) {
+      Abort("invalid pattern for InputWin");
+    }
   }
 }

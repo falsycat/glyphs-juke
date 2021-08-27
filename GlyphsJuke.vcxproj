@@ -155,6 +155,7 @@
     <ClCompile Include="src\PlayScene.cc" />
     <ClCompile Include="src\ResultScene.cc" />
     <ClCompile Include="src\Texture.cc" />
+    <ClCompile Include="src\TitleScene.cc" />
     <ClCompile Include="src\Win32Console.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +184,7 @@
     <ClInclude Include="src\OffsetClock.h" />
     <ClInclude Include="src\Period.h" />
     <ClInclude Include="src\PlayScene.h" />
+    <ClInclude Include="src\GlitchPosteffect.h" />
     <ClInclude Include="src\Rasterbuffer.h" />
     <ClInclude Include="src\iConsole.h" />
     <ClInclude Include="src\iAllocator.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\TextureElement.h" />
     <ClInclude Include="src\TickingClock.h" />
+    <ClInclude Include="src\TitleScene.h" />
     <ClInclude Include="thirdparty\lauxlib.h" />
     <ClInclude Include="thirdparty\linalg.h" />
     <ClInclude Include="thirdparty\lua.h" />
@@ -204,6 +207,7 @@
     <ClInclude Include="thirdparty\luaconf.h" />
     <ClInclude Include="thirdparty\lualib.h" />
     <ClInclude Include="thirdparty\miniaudio.h" />
+    <ClInclude Include="thirdparty\picojson.h" />
     <ClInclude Include="thirdparty\stb_truetype.h" />
     <ClInclude Include="src\Win32Console.h" />
     <ClInclude Include="thirdparty\utf8.h" />

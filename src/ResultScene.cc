@@ -1,8 +1,10 @@
 #include "ResultScene.h"
 
+#include "TitleScene.h"
 
-gj::ResultScene::ResultScene(iAllocator* alloc, const iClock* clock, const Scoreboard& sb) :
-      alloc_(alloc), clock_(clock), sb_(sb),
+
+gj::ResultScene::ResultScene(const Param& p, const Scoreboard& sb) :
+      param_(p), clock_(p.clock), sb_(sb),
       title_(sb.title),
       correct_label_(L"CORRECT TYPES"),
       correct_num_(std::to_wstring(sb.correct)),
@@ -10,7 +12,7 @@ gj::ResultScene::ResultScene(iAllocator* alloc, const iClock* clock, const Score
       line_label_(L"COMPLETE LINES"),
       line_num_(std::to_wstring(sb.completeLines)),
       line_den_(std::to_wstring(sb.lines)),
-      guide_(L"~ PRESS ENTER ~") {
+      guide_(L"~ PRESS SPACE ~") {
 }
 
 gj::UniqPtr<gj::iScene> gj::ResultScene::Update(Frame& f) {
@@ -50,6 +52,10 @@ gj::UniqPtr<gj::iScene> gj::ResultScene::Update(Frame& f) {
 
   guide_.SetPosition((w-guide_.width())/2, static_cast<int32_t>(h*.8));
   f.Add(&guide_);
+
+  if (f.input.find(' ') != std::string::npos) {
+    return param_.alloc->MakeUniq<iScene, TitleScene>(param_);
+  }
 
   return nullptr;
 }

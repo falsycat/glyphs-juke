@@ -1,8 +1,5 @@
 #pragma once
 
-#include "ElementStore.h"
-#include "Frame.h"
-#include "iAllocator.h"
 #include "iScene.h"
 #include "OffsetClock.h"
 #include "Scoreboard.h"
@@ -21,12 +18,13 @@ class ResultScene : public iScene {
   ResultScene& operator=(ResultScene&&) = delete;
   ResultScene& operator=(const ResultScene&) = delete;
 
-  ResultScene(iAllocator* alloc, const iClock* clock, const Scoreboard& sb);
+  ResultScene(const Param& p, const Scoreboard& sb);
 
   UniqPtr<iScene> Update(Frame& f) override;
 
  private:
-  iAllocator* alloc_;
+  Param param_;
+
   OffsetClock clock_;
   Scoreboard  sb_;
 

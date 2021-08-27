@@ -42,7 +42,7 @@ class GlyphElementFactory : public iElementFactory {
     if (found != fonts_.end()) {
       return *found->second;
     }
-    auto f   = alloc_->MakeUniq<Font>(alloc_, "res/font/"+name);
+    auto f   = alloc_->MakeUniq<Font>(alloc_, name);
     auto ptr = f.get();
     fonts_[name] = std::move(f);
     return *ptr;

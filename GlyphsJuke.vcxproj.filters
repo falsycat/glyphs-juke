@@ -48,6 +48,9 @@
     <ClCompile Include="src\AudioDevice.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TitleScene.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\iConsole.h">
@@ -195,6 +198,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MusicElementFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TitleScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\picojson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlitchPosteffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

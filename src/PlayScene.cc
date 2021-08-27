@@ -7,29 +7,28 @@
 #include "ResultScene.h"
 
 
-gj::PlayScene::PlayScene(Param&& p) :
-    alloc_(p.alloc), audio_(p.audio),
-    clock_(p.clock), store_(&clock_, 256) {
+gj::PlayScene::PlayScene(const Param& p, const std::string& title, const std::string& path) :
+    param_(p), clock_(p.clock), store_(&clock_, 256) {
 
-  GlyphElementFactory       glyph(alloc_);
-  InputWindowElementFactory inputWin(alloc_, &sb_);
-  MusicElementFactory       music(alloc_, audio_);
+  GlyphElementFactory       glyph(p.alloc);
+  InputWindowElementFactory inputWin(p.alloc, &sb_);
+  MusicElementFactory       music(p.alloc, p.audio);
 
-  sb_.title = ConvertStrToWstr(p.score);
+  sb_.title = ConvertStrToWstr(title);
 
   Lua::FactoryMap map = {
     { "Glyph",    &glyph },
     { "InputWin", &inputWin },
     { "Music",    &music },
   };
-  lua_ = alloc_->MakeUniq<Lua>(
-    alloc_, &store_, map, "res/score/" + p.score + ".lua");
+  lua_ = p.alloc->MakeUniq<Lua>(
+    p.alloc, &store_, map, path);
 }
 
 
 gj::UniqPtr<gj::iScene> gj::PlayScene::Update(Frame& f) {
   if (store_.IsEmpty()) {
-    return alloc_->MakeUniq<iScene, ResultScene>(alloc_, clock_.parent(), sb_);
+    return param_.alloc->MakeUniq<iScene, ResultScene>(param_, sb_);
   }
 
   store_.Update(f);

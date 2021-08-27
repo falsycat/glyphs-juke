@@ -12,6 +12,17 @@ namespace gj {
 
 class MusicElement : public iElement {
 public:
+  struct Param {
+    iAudioDevice* audio;
+
+    Period period;
+
+    std::string path;
+    double      offset;
+
+    UniqPtr<iElementDriver> driver;
+  };
+
   MusicElement() = delete;
   MusicElement(MusicElement&&) = delete;
   MusicElement(const MusicElement&) = delete;
@@ -19,13 +30,24 @@ public:
   MusicElement& operator=(MusicElement&&) = delete;
   MusicElement& operator=(const MusicElement&) = delete;
 
-  MusicElement(const Period& p, iAudioDevice* audio, const std::string& name) :
-      iElement(p), audio_(audio), path_("res/music/"+name) {
+  MusicElement(Param&& p) :
+      iElement(p.period), audio_(p.audio), path_(p.path), offset_(p.offset),
+      drv_(std::move(p.driver)) {
+    param_["volume"] = 0.;
+    param_["lpf"]    = 0.;
   }
 
   void Update(Frame& frame, double t) override {
+    drv_->Update(param_, t);
+
+    const double volume = std::get<double>(param_["volume"]);
+    const double lpf    = std::get<double>(param_["lpf"]);
+
+    audio_->SetVolume(volume);
+    audio_->SetLpfIntensity(lpf);
+
     if (first_) {
-      audio_->PlayMusic(path_);
+      audio_->PlayMusic(path_, offset_);
       first_ = false;
     }
   }
@@ -41,6 +63,11 @@ public:
   std::string   path_;
 
   bool first_ = true;
+
+  double offset_;
+
+  UniqPtr<iElementDriver> drv_;
+  iElementDriver::Param   param_;
 };
 
 

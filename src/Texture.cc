@@ -81,7 +81,7 @@ void gj::Texture::Draw(Colorbuffer& fb) const {
       if (dstx < 0 || w <= dstx) continue;
       if (dsty < 0 || h <= dsty) continue;
 
-      dst[dstx + w*dsty] = src[srcx + srcw*srcy] * alpha_;
+      dst[dstx + w*dsty] += src[srcx + srcw*srcy] * alpha_;
     }
   }
 }
