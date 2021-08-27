@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Frame.h"
+#include "iAudioDevice.h"
 #include "iDrawable.h"
 #include "iWritable.h"
 #include "iScene.h"
@@ -22,6 +23,7 @@ class Game : public iDrawable, public iWritable {
 
   struct Param {
     iAllocator*   alloc;
+    iAudioDevice* audio;
     const iClock* clock;
 
     uint32_t w, h;
@@ -44,6 +46,7 @@ class Game : public iDrawable, public iWritable {
 
     UniqPtr<iScene> next = scene_->Update(frame_);
     if (next) {
+      /* This could cause an empty frame during scene change but I think it's not so big problem. */
       scene_ = std::move(next);
     }
   }
@@ -57,7 +60,8 @@ class Game : public iDrawable, public iWritable {
   }
 
  private:
-  iAllocator*  alloc_;
+  iAllocator* alloc_;
+
   TickingClock clock_;
 
   Logger logger_;

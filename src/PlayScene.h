@@ -4,6 +4,7 @@
 #include "ElementStore.h"
 #include "Frame.h"
 #include "iAllocator.h"
+#include "iAudioDevice.h"
 #include "iLogger.h"
 #include "iScene.h"
 #include "Lua.h"
@@ -18,10 +19,8 @@ class PlayScene : public iScene {
  public:
   struct Param {
     iAllocator*   alloc;
-    iLogger*      logger;
+    iAudioDevice* audio;
     const iClock* clock;
-
-    uint32_t w, h;
 
     std::string score;
   };
@@ -38,10 +37,8 @@ class PlayScene : public iScene {
   UniqPtr<iScene> Update(Frame& f) override;
 
  private:
-  iAllocator* alloc_;
-  iLogger*    logger_;
-
-  uint32_t w_, h_;
+  iAllocator*   alloc_;
+  iAudioDevice* audio_;
 
   OffsetClock clock_;
 

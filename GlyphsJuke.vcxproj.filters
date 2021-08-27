@@ -45,6 +45,9 @@
     <ClCompile Include="src\ResultScene.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AudioDevice.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\iConsole.h">
@@ -177,6 +180,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ResultScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\miniaudio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MusicElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AudioDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iAudioDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MusicElementFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

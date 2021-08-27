@@ -6,6 +6,7 @@
 #undef NOMINMAX
 
 #include "common.h"
+#include "AudioDevice.h"
 #include "Font.h"
 #include "Game.h"
 #include "LinearAllocator.h"
@@ -25,12 +26,16 @@ int main() {
   gj::Win32Console console(&alloc, kWidth, kHeight);
   console.Show();
 
+  gj::AudioDevice audio;
+
   gj::Game::Param param;
   param.alloc = &alloc;
-  param.clock = &gj::SystemClock::instance();
+  param.clock = &audio;
+  param.audio = &audio;
   param.w     = kWidth;
   param.h     = kHeight;
   gj::Game game(std::move(param));
+
   while (true) {
     game.Update(console.TakeInput());
     {

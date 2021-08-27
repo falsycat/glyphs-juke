@@ -3,26 +3,27 @@
 #include "common.h"
 #include "GlyphElementFactory.h"
 #include "InputWindowElementFactory.h"
+#include "MusicElementFactory.h"
 #include "ResultScene.h"
 
 
 gj::PlayScene::PlayScene(Param&& p) :
-    alloc_(p.alloc), logger_(p.logger), w_(p.w), h_(p.h),
+    alloc_(p.alloc), audio_(p.audio),
     clock_(p.clock), store_(&clock_, 256) {
 
   GlyphElementFactory       glyph(alloc_);
   InputWindowElementFactory inputWin(alloc_, &sb_);
+  MusicElementFactory       music(alloc_, audio_);
 
   sb_.title = ConvertStrToWstr(p.score);
 
-  Lua::FactoryMap map;
-  map["Glyph"]    = &glyph;
-  map["InputWin"] = &inputWin;
-
+  Lua::FactoryMap map = {
+    { "Glyph",    &glyph },
+    { "InputWin", &inputWin },
+    { "Music",    &music },
+  };
   lua_ = alloc_->MakeUniq<Lua>(
     alloc_, &store_, map, "res/score/" + p.score + ".lua");
-
-  logger_->Print(L"PlayScene init");
 }
 
 
