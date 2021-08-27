@@ -18,7 +18,7 @@ class InputWindowElement : public iElement {
     UniqPtr<iInputMatcher>  matcher;
     UniqPtr<iElementDriver> driver;
 
-    Scoreboard* scoreboard;
+    Scoreboard* scoreboard = nullptr;
 
     Period period;
 

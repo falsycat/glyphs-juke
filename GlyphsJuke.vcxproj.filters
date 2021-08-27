@@ -42,6 +42,9 @@
     <ClCompile Include="src\HiraganaMatcher.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ResultScene.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\iConsole.h">
@@ -171,6 +174,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scoreboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResultScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

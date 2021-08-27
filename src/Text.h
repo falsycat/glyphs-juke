@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 
+#include "common.h"
 #include "iWritable.h"
 
 namespace gj {
@@ -17,7 +18,8 @@ class Text : public WritableBase {
   Text& operator=(const Text&) = default;
 
   Text(const std::wstring& str, uint32_t x = 0, uint32_t y = 0) :
-      WritableBase(x, y), entity_(str) {
+      WritableBase(x, y), entity_(str),
+      w_(static_cast<uint32_t>(CountWstrBytes(str))) {
   }
 
   void Write(Textbuffer& fb) const override {
@@ -39,8 +41,16 @@ class Text : public WritableBase {
     }
   }
 
+  const std::wstring& entity() const {
+    return entity_;
+  }
+  uint32_t width() const {
+    return w_;
+  }
+
  private:
   std::wstring entity_;
+  uint32_t w_;
 };
 
 

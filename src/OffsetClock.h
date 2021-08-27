@@ -28,6 +28,9 @@ class OffsetClock : public iClock {
   uint64_t now() const override {
     return parent_->now() - offset_;
   }
+  const iClock* parent() const {
+    return parent_;
+  }
 
  private:
   const iClock* parent_;

@@ -152,6 +152,7 @@
     <ClCompile Include="src\Lua.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\PlayScene.cc" />
+    <ClCompile Include="src\ResultScene.cc" />
     <ClCompile Include="src\Texture.cc" />
     <ClCompile Include="src\Win32Console.cc" />
   </ItemGroup>
@@ -182,6 +183,7 @@
     <ClInclude Include="src\iAllocator.h" />
     <ClInclude Include="src\LinearAllocator.h" />
     <ClInclude Include="src\Frame.h" />
+    <ClInclude Include="src\ResultScene.h" />
     <ClInclude Include="src\Scoreboard.h" />
     <ClInclude Include="src\StackAllocator.h" />
     <ClInclude Include="src\SystemClock.h" />

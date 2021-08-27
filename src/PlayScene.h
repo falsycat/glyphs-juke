@@ -35,13 +35,7 @@ class PlayScene : public iScene {
 
   PlayScene(Param&& p);
 
-  UniqPtr<iScene> Update(Frame& f) override {
-    if (store_.IsEmpty()) {
-      /* TODO create and return next scene */
-    }
-    store_.Update(f);
-    return nullptr;
-  }
+  UniqPtr<iScene> Update(Frame& f) override;
 
  private:
   iAllocator* alloc_;
