@@ -27,16 +27,19 @@ class GlitchPosteffect : public iDrawable {
     float* ptr = fb.ptr();
 
     for (int32_t y = 0; y < h; ++y) {
-      const double shift = (XorShift(seed+y)%100/100.*2-1)*maxShift;
-      const int32_t s = static_cast<int32_t>(w*shift);
-      if (std::abs(shift) > 1) continue;
+      if (XorShift(seed+y)%10 == 0) continue;
       
-      const size_t offset = static_cast<size_t>(y) * w;
-      float* src = ptr + offset;
-      float* dst = ptr + offset + s;
-      if (src > dst) std::swap(src, dst);
+      const double shift = (XorShift(seed+y+h)%100/100.*2-1)*maxShift;
+      if (std::abs(shift) > 1) continue;
 
-      std::memmove(dst, src, static_cast<size_t>(w) - std::abs(s));
+      const int32_t s  = static_cast<int32_t>(w*shift);
+      const int32_t as = std::abs(s);
+      
+      float* src = ptr + static_cast<size_t>(y) * w;
+      float* dst = src + as;
+      if (s < 0) std::swap(src, dst);
+
+      std::memmove(dst, src, (static_cast<size_t>(w) - as)*sizeof(*ptr));
     }
   }
 
