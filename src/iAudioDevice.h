@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "iAudioEffect.h"
+
 
 namespace gj {
 
@@ -18,11 +20,11 @@ public:
 
   virtual ~iAudioDevice() = default;
 
-  virtual void PlayMusic(const std::string& path, double offset) = 0;
-  virtual void StopMusic() = 0;
+  virtual void AddEffect(iAudioEffect* fx) = 0;
+  virtual void RemoveEffect(iAudioEffect* fx) = 0;
 
-  virtual void SetVolume(double amp) = 0;
-  virtual void SetLpfIntensity(double v) = 0;
+  virtual uint8_t  ch()         const = 0;
+  virtual uint32_t sampleRate() const = 0;
 };
 
 

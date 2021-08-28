@@ -53,6 +53,7 @@ gj::TitleScene::TitleScene(const Param& p) :
 }
 
 gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
+  /* input handling */
   for (const auto c : frame.input) {
     switch (c) {
     case 'h':
@@ -62,11 +63,31 @@ gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
       SelectScore_((select_index_+1)%list_.size());
       break;
     case ' ':
+      if (music_) param_.audio->RemoveEffect(music_.get());
       return param_.alloc->MakeUniq<iScene, PlayScene>(
         param_, list_[select_index_].displayName, list_[select_index_].score);
     }
   }
 
+  /* play music */
+  if (trying_play_ && !(music_ && music_->IsBusy())) {
+    if (music_) {
+      param_.audio->RemoveEffect(music_.get());
+    }
+    auto au = param_.audio;
+
+    const auto& s = list_[select_index_];
+    music_ = param_.alloc->MakeUniq<Music>(s.music, au->ch(), au->sampleRate());
+    music_->Seek(s.playOffset);
+    music_->SetVolume(.2f);
+    music_->SetLpf(.99f);
+    music_->Play();
+
+    au->AddEffect(music_.get());
+    trying_play_ = false;
+  }
+
+  /* graphics calculation */
   const uint64_t now = param_.clock->now();
 
   const int32_t w = static_cast<int32_t>(frame.w);
@@ -112,7 +133,7 @@ gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
   frame.Add(&guide_);
 
   pe_.seed     = XorShift(now/period1+10);
-  pe_.maxShift = (XorShift(now/period1+7)%100/100.*2 - 1)*.1;
+  pe_.maxShift = (XorShift(now/period1+7)%100/100.*2 - 1)*.03;
   frame.Add(&pe_);
 
   return nullptr;
@@ -123,7 +144,5 @@ void gj::TitleScene::SelectScore_(size_t index) {
   score_        = Text(ConvertStrToWstr(s.displayName));
   select_index_ = index;
   
-  param_.audio->SetVolume(.5);
-  param_.audio->SetLpfIntensity(.999);
-  param_.audio->PlayMusic(s.music, s.playOffset);
+  trying_play_ = true;
 }

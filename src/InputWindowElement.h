@@ -75,6 +75,10 @@ class InputWindowElement : public iElement {
     }
   }
 
+  bool HasPrepared() const override {
+    return true;
+  }
+
  private:
   UniqPtr<iInputMatcher>  matcher_;
   UniqPtr<iElementDriver> drv_;

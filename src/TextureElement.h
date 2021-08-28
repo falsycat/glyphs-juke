@@ -68,6 +68,10 @@ public:
   void Finalize() override {
   }
 
+  bool HasPrepared() const override {
+    return true;
+  }
+
  private:
   Texture tex_;
   UniqPtr<iElementDriver> drv_;

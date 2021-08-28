@@ -25,6 +25,8 @@ class iElement {
 
   virtual void Finalize() = 0;
 
+  virtual bool HasPrepared() const = 0;
+
   /* Interfaces had better not have a variable but this is for optimization. */
   const Period period;
 };

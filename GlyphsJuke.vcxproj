@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="src\HiraganaMatcher.h" />
     <ClInclude Include="src\iAudioDevice.h" />
+    <ClInclude Include="src\iAudioEffect.h" />
     <ClInclude Include="src\iInputMatcher.h" />
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\ElementStore.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="src\iWritable.h" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Lua.h" />
+    <ClInclude Include="src\Music.h" />
     <ClInclude Include="src\MusicElement.h" />
     <ClInclude Include="src\AudioDevice.h" />
     <ClInclude Include="src\MusicElementFactory.h" />

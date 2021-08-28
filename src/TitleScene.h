@@ -3,6 +3,7 @@
 #include "common.h"
 #include "GlitchPosteffect.h"
 #include "iScene.h"
+#include "Music.h"
 #include "Text.h"
 #include "Texture.h"
 
@@ -29,7 +30,7 @@ class TitleScene : public iScene {
     std::string displayName;
     std::string score;
     std::string music;
-    double      playOffset;
+    double      playOffset = 0;
   };
 
   Param param_;
@@ -40,13 +41,17 @@ class TitleScene : public iScene {
   Text guide_;
 
   Texture logo_;
+
+  GlitchPosteffect pe_;
   
   size_t select_index_;
   std::vector<Score> list_;
 
-  GlitchPosteffect pe_;
+  bool trying_play_ = false;
+  UniqPtr<Music> music_;
 
   void SelectScore_(size_t index);
+  void TryPlayingMusic_();
 };
 
 

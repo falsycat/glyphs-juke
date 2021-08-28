@@ -67,8 +67,19 @@ class ElementStore {
       performing_.end());
   }
 
-  bool IsEmpty() {
+  bool IsEmpty() const {
     return pending_.empty() && performing_.empty();
+  }
+
+  size_t CountPreparings() const {
+    size_t n = 0;
+    for (const auto& e : pending_) {
+      if (!e->HasPrepared()) ++n;
+    }
+    return n;
+  }
+  size_t size() const {
+    return pending_.size() + performing_.size();
   }
 
  private:

@@ -5,6 +5,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <vector>
 
 #define NOMINMAX  /* miniaudio includes windows.h */
 #include "thirdparty/miniaudio.h"
@@ -32,14 +33,23 @@ class AudioDevice : public iAudioDevice, public iClock {
   AudioDevice();
   ~AudioDevice();
 
-  void PlayMusic(const std::string& path, double offset) override;
-  void StopMusic() override;
-
-  void SetVolume(double amp) override {
-    amp_.store(amp);
+  void AddEffect(iAudioEffect* fx) override {
+    std::lock_guard _(mtx_);
+    effects_.push_back(fx);
   }
-  void SetLpfIntensity(double v) override {
-    lpf_coe_.store(v);
+  void RemoveEffect(iAudioEffect* fx) override {
+    std::lock_guard _(mtx_);
+
+    auto itr = std::find(effects_.begin(), effects_.end(), fx);
+    if (itr == effects_.end()) return;
+    effects_.erase(itr);
+  }
+
+  uint8_t ch() const override {
+    return kChannel;
+  }
+  uint32_t sampleRate() const override {
+    return kSampleRate;
   }
 
   uint64_t now() const override {
@@ -51,15 +61,9 @@ class AudioDevice : public iAudioDevice, public iClock {
 
   ma_device ma_{0};
 
-  bool playing_ = false;
-  ma_decoder dec_{0};
-
-  std::atomic<double> amp_ = 1;
-
-  std::atomic<double> lpf_coe_  = 0;
-  float               lpf_prev_ = 0;
-
   std::atomic<uint64_t> time_;
+
+  std::vector<iAudioEffect*> effects_;
 
   static void Callback_(ma_device* ma, void* out, const void* in, ma_uint32 framecnt);
 };

@@ -5,7 +5,7 @@
 #include "iAudioDevice.h"
 #include "iElement.h"
 #include "iElementDriver.h"
-#include "Texture.h"
+#include "Music.h"
 
 namespace gj {
 
@@ -31,8 +31,12 @@ public:
   MusicElement& operator=(const MusicElement&) = delete;
 
   MusicElement(Param&& p) :
-      iElement(p.period), audio_(p.audio), path_(p.path), offset_(p.offset),
+      iElement(p.period), audio_(p.audio),
+      music_(p.path, audio_->ch(), audio_->sampleRate()),
       drv_(std::move(p.driver)) {
+    music_.Seek(p.offset);
+    audio_->AddEffect(&music_);
+
     param_["volume"] = 0.;
     param_["lpf"]    = 0.;
   }
@@ -43,28 +47,28 @@ public:
     const double volume = std::get<double>(param_["volume"]);
     const double lpf    = std::get<double>(param_["lpf"]);
 
-    audio_->SetVolume(volume);
-    audio_->SetLpfIntensity(lpf);
+    music_.SetVolume(static_cast<float>(volume));
+    music_.SetLpf(static_cast<float>(lpf));
 
     if (first_) {
-      audio_->PlayMusic(path_, offset_);
+      music_.Play();
       first_ = false;
     }
   }
 
   void Finalize() override {
-    if (!first_) {
-      audio_->StopMusic();
-    }
+    audio_->RemoveEffect(&music_);
+  }
+
+  bool HasPrepared() const override {
+    return !music_.IsBusy();
   }
 
  private:
   iAudioDevice* audio_;
-  std::string   path_;
+  Music         music_;
 
   bool first_ = true;
-
-  double offset_;
 
   UniqPtr<iElementDriver> drv_;
   iElementDriver::Param   param_;

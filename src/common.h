@@ -48,10 +48,15 @@ static inline uint64_t XorShift(uint64_t x) {
 
 
 [[noreturn]]
-static inline void Abort(const std::string& msg) {
-  MessageBox(NULL, ConvertStrToWstr(msg).c_str(), L"PROGRAM ABORTED", MB_OK);
+static inline void Abort(const std::wstring& msg) {
+  MessageBox(NULL, msg.c_str(), L"PROGRAM ABORTED", MB_OK);
   std::exit(1);
 }
+[[noreturn]]
+static inline void Abort(const std::string& msg) {
+  Abort(ConvertStrToWstr(msg));
+}
+
 
 
 }
