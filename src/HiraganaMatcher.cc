@@ -106,7 +106,7 @@ static const std::map<std::wstring, std::vector<std::wstring>> kPatterns = {
   { L"っげ", { L"gge" } },
   { L"っご", { L"ggo" } },
   { L"っさ", { L"ssa" } },
-  { L"っし", { L"ssi" } },
+  { L"っし", { L"ssi", L"sshi" } },
   { L"っす", { L"ssu" } },
   { L"っせ", { L"sse" } },
   { L"っそ", { L"sso" } },
@@ -153,13 +153,30 @@ static const std::map<std::wstring, std::vector<std::wstring>> kPatterns = {
   { L"っや", { L"yya" } },
   { L"っゆ", { L"yyu" } },
   { L"っよ", { L"yyo" } },
+  { L"っきゃ", { L"kkya" } },
+  { L"っきゅ", { L"kkyu" } },
+  { L"っきょ", { L"kkyo" } },
+  { L"っしゃ", { L"ssha", L"ssya" }},
+  { L"っしゅ", { L"sshu", L"ssyu" }},
+  { L"っしょ", { L"ssho", L"ssyo" }},
+  { L"っじゃ", { L"jja", L"zzya" }},
+  { L"っじゅ", { L"jju", L"zzyu" }},
+  { L"っじぇ", { L"jje", L"zzye" }},
+  { L"っじょ", { L"jjo", L"zzyo" }},
+  { L"っちゃ", { L"ccha", L"ttya" }},
+  { L"っちゅ", { L"cchu", L"ttyu" }},
+  { L"っちょ", { L"ccho", L"ttyo" }},
   { L"っら", { L"rra" } },
   { L"っり", { L"rri" } },
   { L"っる", { L"rru" } },
   { L"っれ", { L"rre" } },
   { L"っろ", { L"rro" } },
-  { L"わ", { L"wwa" } },
-  { L"を", { L"wwo" } },
+  { L"っわ", { L"wwa" } },
+  { L"っを", { L"wwo" } },
+
+  { L"ゃ", { L"lya", L"xya" } },
+  { L"ゅ", { L"lyu", L"xyu" } },
+  { L"ょ", { L"lyo", L"xyo" } },
 };
 
 
@@ -248,7 +265,7 @@ void gj::HiraganaMatcher::UpdateExpects_() {
       remain = remain.substr(len);
     }
     if (prev == remain.size()) {
-      Abort("invalid pattern for InputWin");
+      Abort(L"invalid pattern: "+remain);
     }
   }
 }
