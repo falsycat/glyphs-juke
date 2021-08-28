@@ -27,15 +27,15 @@ class TitleScene : public iScene {
 
  private:
   struct Score {
-    std::string displayName;
-    std::string score;
+    std::string title;
+    std::string path;
     std::string music;
     double      playOffset = 0;
   };
 
   Param param_;
 
-  Text score_;
+  Text title_;
   Text next_;
   Text prev_;
   Text guide_;

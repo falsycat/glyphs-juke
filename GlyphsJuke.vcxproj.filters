@@ -51,6 +51,9 @@
     <ClCompile Include="src\TitleScene.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\LoadScene.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\iConsole.h">
@@ -213,6 +216,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Music.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

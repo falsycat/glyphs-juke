@@ -150,6 +150,7 @@
     <ClCompile Include="src\Font.cc" />
     <ClCompile Include="src\Game.cc" />
     <ClCompile Include="src\HiraganaMatcher.cc" />
+    <ClCompile Include="src\LoadScene.cc" />
     <ClCompile Include="src\Lua.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\PlayScene.cc" />
@@ -177,6 +178,7 @@
     <ClInclude Include="src\InputWindowElementFactory.h" />
     <ClInclude Include="src\iScene.h" />
     <ClInclude Include="src\iWritable.h" />
+    <ClInclude Include="src\LoadScene.h" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Lua.h" />
     <ClInclude Include="src\Music.h" />

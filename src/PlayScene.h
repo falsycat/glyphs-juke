@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 
 #include "ElementStore.h"
 #include "iScene.h"
@@ -13,6 +14,8 @@ namespace gj {
 
 class PlayScene : public iScene {
  public:
+  friend class LoadScene;
+
   PlayScene() = delete;
   PlayScene(PlayScene&&) = delete;
   PlayScene(const PlayScene&) = delete;
@@ -21,10 +24,13 @@ class PlayScene : public iScene {
   PlayScene& operator=(const PlayScene&) = delete;
 
   PlayScene(const Param& p, const std::string& title, const std::string& path);
-
+  
   UniqPtr<iScene> Update(Frame& f) override;
 
  private:
+  void Start();
+  bool HasPrepared() const;
+
   Param param_;
 
   OffsetClock clock_;

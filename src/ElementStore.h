@@ -15,13 +15,13 @@ class ElementStore {
  public:
   ElementStore() = delete;
 
-  ElementStore(ElementStore&&) = delete;
+  ElementStore(ElementStore&&) = default;
   ElementStore(const ElementStore&) = delete;
 
-  ElementStore& operator=(ElementStore&&) = delete;
+  ElementStore& operator=(ElementStore&&) = default;
   ElementStore& operator=(const ElementStore&) = delete;
 
-  ElementStore(iClock* clock, size_t reserve) : clock_(clock) {
+  ElementStore(size_t reserve) {
     pending_.reserve(reserve);
     performing_.reserve(reserve);
   }
@@ -35,9 +35,7 @@ class ElementStore {
     pending_.insert(insert_pos, std::move(e));
   }
 
-  void Update(Frame& frame) {
-    const uint64_t now = clock_->now();
-
+  void Update(Frame& frame, uint64_t now) {
     auto pending_beg = pending_.begin();
     auto pending_end = pending_.end();
     auto pending_itr = pending_beg;
@@ -83,8 +81,6 @@ class ElementStore {
   }
 
  private:
-  const iClock* clock_;
-
   std::vector<UniqPtr<iElement>> pending_;
   std::vector<UniqPtr<iElement>> performing_;
 };

@@ -10,12 +10,12 @@
 
 #include "common.h"
 #include "Font.h"
-#include "PlayScene.h"
+#include "LoadScene.h"
 
 
 gj::TitleScene::TitleScene(const Param& p) :
     param_(p),
-    score_(L"penguin: you didn't see anything..."),
+    title_(L"penguin: you didn't see anything..."),
     next_(L"> L"), prev_(L"H <"),
     guide_(L"H:PREV / SPACE:PLAY / L:NEXT"),
     logo_(Colorbuffer(p.alloc, 1, 1)) {
@@ -35,11 +35,10 @@ gj::TitleScene::TitleScene(const Param& p) :
     auto& obj = e.get<::picojson::object>();
 
     Score s;
-
-    s.displayName = obj["displayName"].get<std::string>();
-    s.music       = obj["music"].get<std::string>();
-    s.score       = obj["score"].get<std::string>();
-    s.playOffset  = obj["playOffset"].get<double>();
+    s.title      = obj["title"].get<std::string>();
+    s.music      = obj["music"].get<std::string>();
+    s.path       = obj["path"].get<std::string>();
+    s.playOffset = obj["playOffset"].get<double>();
 
     list_.push_back(s);
   }
@@ -56,16 +55,22 @@ gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
   /* input handling */
   for (const auto c : frame.input) {
     switch (c) {
+    case ' ': {
+      if (music_) param_.audio->RemoveEffect(music_.get());
+      const auto& s = list_[select_index_];
+      LoadScene::Param param;
+      param.super  = param_;
+      param.path   = s.path;
+      param.title  = s.title;
+      param.orphan = std::move(music_);
+      return param_.alloc->MakeUniq<iScene, LoadScene>(std::move(param));
+    }
     case 'h':
       SelectScore_(select_index_? select_index_-1: list_.size()-1);
       break;
     case 'l':
       SelectScore_((select_index_+1)%list_.size());
       break;
-    case ' ':
-      if (music_) param_.audio->RemoveEffect(music_.get());
-      return param_.alloc->MakeUniq<iScene, PlayScene>(
-        param_, list_[select_index_].displayName, list_[select_index_].score);
     }
   }
 
@@ -126,8 +131,8 @@ gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
   prev_.SetPosition(static_cast<int32_t>(w*.2), selector_y);
   frame.Add(&prev_);
   
-  score_.SetPosition((w-score_.width())/2, selector_y);
-  frame.Add(&score_);
+  title_.SetPosition((w-title_.width())/2, selector_y);
+  frame.Add(&title_);
 
   guide_.SetPosition((w-guide_.width())/2, selector_y+3);
   frame.Add(&guide_);
@@ -141,7 +146,7 @@ gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
 
 void gj::TitleScene::SelectScore_(size_t index) {
   const auto& s = list_[index];
-  score_        = Text(ConvertStrToWstr(s.displayName));
+  title_        = Text(ConvertStrToWstr(s.title));
   select_index_ = index;
   
   trying_play_ = true;

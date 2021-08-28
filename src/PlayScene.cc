@@ -7,8 +7,17 @@
 #include "ResultScene.h"
 
 
+gj::UniqPtr<gj::iScene> gj::PlayScene::Update(Frame& f) {
+  if (store_.IsEmpty()) {
+    return param_.alloc->MakeUniq<iScene, ResultScene>(param_, sb_);
+  }
+
+  store_.Update(f, clock_.now());
+  return nullptr;
+}
+
 gj::PlayScene::PlayScene(const Param& p, const std::string& title, const std::string& path) :
-    param_(p), clock_(p.clock), store_(&clock_, 256) {
+    param_(p), clock_(p.clock), store_(256) {
 
   GlyphElementFactory       glyph(p.alloc);
   InputWindowElementFactory inputWin(p.alloc, &sb_);
@@ -21,16 +30,13 @@ gj::PlayScene::PlayScene(const Param& p, const std::string& title, const std::st
     { "InputWin", &inputWin },
     { "Music",    &music },
   };
-  lua_ = p.alloc->MakeUniq<Lua>(
-    p.alloc, &store_, map, path);
+  lua_ = p.alloc->MakeUniq<Lua>(p.alloc, &store_, map, path);
 }
 
+void gj::PlayScene::Start() {
+  clock_ = OffsetClock(param_.clock);
+}
 
-gj::UniqPtr<gj::iScene> gj::PlayScene::Update(Frame& f) {
-  if (store_.IsEmpty()) {
-    return param_.alloc->MakeUniq<iScene, ResultScene>(param_, sb_);
-  }
-
-  store_.Update(f);
-  return nullptr;
+bool gj::PlayScene::HasPrepared() const {
+  return store_.CountPreparings() == 0;
 }

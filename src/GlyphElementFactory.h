@@ -27,7 +27,7 @@ class GlyphElementFactory : public iElementFactory {
 
     const std::string text = std::get<std::string>(param.custom[0]);
     const std::string name = std::get<std::string>(param.custom[1]);
-    const intmax_t    size = std::get<double>(param.custom[2]);
+    const uint32_t    size = static_cast<uint32_t>(std::get<double>(param.custom[2]));
 
     auto& font = FindOrCreateFont(name);
     auto  tex  = std::move(font.RenderGlyphs(ConvertStrToWstr(text), size));  /* TODO */

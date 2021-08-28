@@ -19,16 +19,25 @@ class Lua {
   using FactoryMap = std::map<std::string, iElementFactory*>;
 
   Lua() = delete;
-  Lua(Lua&&) = delete;
   Lua(const Lua&) = delete;
 
-  Lua& operator=(Lua&&) = delete;
   Lua& operator=(const Lua&) = delete;
+  
+  Lua(Lua&& src) noexcept : L(src.L) {
+    src.L = nullptr;
+  }
+  Lua& operator=(Lua&& src) noexcept {
+    if (&src != this) {
+      L = src.L;
+      src.L = nullptr;
+    }
+    return *this;
+  }
 
   Lua(iAllocator* alloc, ElementStore* store, const FactoryMap& factory, const std::string& path);
 
   ~Lua() {
-    lua_close(L);
+    if (L) lua_close(L);
   }
 
  private:
