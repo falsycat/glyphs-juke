@@ -19,7 +19,11 @@ public:
     Deleter& operator=(Deleter&&) = default;
     Deleter& operator=(const Deleter&) = delete;
 
-    Deleter(iAllocator* alloc) : alloc_(alloc) {
+    template <typename I>
+    Deleter(Deleter<I>&& src) {
+      alloc_ = src.alloc_;
+    }
+    explicit Deleter(iAllocator* alloc) : alloc_(alloc) {
     }
 
     void operator()(T* ptr) {
@@ -56,11 +60,6 @@ public:
   UniqPtr<T> MakeUniq(Args&&... args) {
     T* ptr = Alloc<T>();
     return std::unique_ptr<T, Deleter<T>>(new(ptr) T(std::forward<Args>(args)...), Deleter<T>(this));
-  }
-  template <typename I, typename T, typename... Args>
-  UniqPtr<I> MakeUniq(Args&&... args) {
-    T* ptr = Alloc<T>();
-    return std::unique_ptr<I, Deleter<I>>(new(ptr) T(std::forward<Args>(args)...), Deleter<I>(this));
   }
   template <typename T>
   UniqPtr<T> MakeUniqArray(size_t n) {

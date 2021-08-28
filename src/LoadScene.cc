@@ -12,7 +12,7 @@ gj::LoadScene::LoadScene(Param&& p) :
 gj::UniqPtr<gj::iScene> gj::LoadScene::Update(Frame& frame) {
   if (prod_->HasPrepared() && !(orphan_ && orphan_->IsBusy())) {
     prod_->Start();
-    return UniqPtr<iScene>(prod_.release(), iAllocator::Deleter<iScene>(alloc_));
+    return std::move(prod_);
   }
 
   const uint64_t now = clock_->now();

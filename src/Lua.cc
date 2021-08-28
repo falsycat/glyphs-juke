@@ -118,7 +118,7 @@ static int CallFactory_(lua_State* L) {
 
   gj::iElementFactory::Param param;
   param.period = gj::Period(st, ed);
-  param.driver = alloc->MakeUniq<gj::iElementDriver, LuaFunc>(L, n);
+  param.driver = alloc->MakeUniq<LuaFunc>(L, n);
 
   for (int i = 3; i < n; ++i) {
     gj::iElementFactory::Param::CustomValue v;

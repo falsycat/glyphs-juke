@@ -32,10 +32,10 @@ class InputWindowElementFactory : public iElementFactory {
     p.period     = param.period;
     p.scoreboard = sb_;
     p.driver     = std::move(param.driver);
-    p.matcher    = alloc_->MakeUniq<iInputMatcher, HiraganaMatcher>(ConvertStrToWstr(kana));
+    p.matcher    = alloc_->MakeUniq<HiraganaMatcher>(ConvertStrToWstr(kana));
     p.text       = ConvertStrToWstr(text);
 
-    return alloc_->MakeUniq<iElement, InputWindowElement>(std::move(p));
+    return alloc_->MakeUniq<InputWindowElement>(std::move(p));
   }
 
  private:

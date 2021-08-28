@@ -63,7 +63,7 @@ gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
       param.path   = s.path;
       param.title  = s.title;
       param.orphan = std::move(music_);
-      return param_.alloc->MakeUniq<iScene, LoadScene>(std::move(param));
+      return param_.alloc->MakeUniq<LoadScene>(std::move(param));
     }
     case 'h':
       SelectScore_(select_index_? select_index_-1: list_.size()-1);

@@ -54,7 +54,7 @@ gj::UniqPtr<gj::iScene> gj::ResultScene::Update(Frame& f) {
   f.Add(&guide_);
 
   if (f.input.find(' ') != std::string::npos) {
-    return param_.alloc->MakeUniq<iScene, TitleScene>(param_);
+    return param_.alloc->MakeUniq<TitleScene>(param_);
   }
 
   return nullptr;

@@ -9,7 +9,7 @@
 
 gj::UniqPtr<gj::iScene> gj::PlayScene::Update(Frame& f) {
   if (store_.IsEmpty()) {
-    return param_.alloc->MakeUniq<iScene, ResultScene>(param_, sb_);
+    return param_.alloc->MakeUniq<ResultScene>(param_, sb_);
   }
 
   store_.Update(f, clock_.now());

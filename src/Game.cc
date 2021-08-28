@@ -14,5 +14,5 @@ gj::Game::Game(gj::Game::Param&& p) :
   param.alloc = alloc_;
   param.clock = &clock_;
   param.audio = p.audio;
-  scene_ = alloc_->MakeUniq<gj::iScene, gj::TitleScene>(param);
+  scene_ = alloc_->MakeUniq<gj::TitleScene>(param);
 }

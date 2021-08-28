@@ -33,7 +33,7 @@ class MusicElementFactory : public iElementFactory {
     p.path   = path;
     p.offset = offset;
     p.driver = std::move(param.driver);
-    return alloc_->MakeUniq<iElement, MusicElement>(std::move(p));
+    return alloc_->MakeUniq<MusicElement>(std::move(p));
   }
 
  private:

@@ -32,7 +32,7 @@ class GlyphElementFactory : public iElementFactory {
     auto& font = FindOrCreateFont(name);
     auto  tex  = std::move(font.RenderGlyphs(ConvertStrToWstr(text), size));  /* TODO */
 
-    return alloc_->MakeUniq<iElement, TextureElement>(
+    return alloc_->MakeUniq<TextureElement>(
       param.period, std::move(tex), std::move(param.driver));
   }
 
