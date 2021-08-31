@@ -29,6 +29,7 @@ class InputWindowElementFactory : public iElementFactory {
     const std::string kana = std::get<std::string>(param.custom[1]);
 
     InputWindowElement::Param p;
+    p.alloc      = alloc_;
     p.period     = param.period;
     p.scoreboard = sb_;
     p.driver     = std::move(param.driver);
