@@ -41,6 +41,7 @@ public:
     const double c = std::cos(rota);
     const double s = std::sin(rota);
     
+    /* calculates matrix */
     auto Ms = mat3{
       { scaleX, 0, 0 },
       { 0, scaleY, 0 },
@@ -59,6 +60,7 @@ public:
     M = ::linalg::mul(M, Mr);
     M = ::linalg::mul(M, Ms);
 
+    /* applies calculated results */
     tex_.SetMatrix(M);
     tex_.SetAlpha(static_cast<float>(alpha));
 

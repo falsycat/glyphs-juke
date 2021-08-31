@@ -191,12 +191,15 @@ bool gj::HiraganaMatcher::Input_(wchar_t c, bool force_cut) {
   bool   accept     = false;
   size_t part_match = 0;
   size_t comp_match = 0;
+
+  /* finds the longest pattern that matches to the remained char */
   for (size_t i = 1; i <= pattern_len; ++i) {
     const auto& p = kPatterns.find(remain.substr(0, i));
     if (p == kPatterns.end()) continue;
 
-    const auto& preds = p->second;
-    for (const auto& itr : preds) {
+    /* checks if there's a candidate which matches the newbuf */
+    const auto& candidates = p->second;
+    for (const auto& itr : candidates) {
       if (newbuf.size() == 0 || itr.size() < newbuf.size()) {
         continue;
       }
@@ -224,6 +227,8 @@ bool gj::HiraganaMatcher::Input_(wchar_t c, bool force_cut) {
     return Input_(c, true);
   }
 
+  /* if there's a pattern completely matched with newbuf and
+   * it's longer than any patterns partly matched, the pattern is determined */
   if (comp_match > part_match) {
     buffer_ = L"";
     state_.match += comp_match;
@@ -244,12 +249,16 @@ void gj::HiraganaMatcher::UpdateExpects_() {
   bool first = true;
   while (remain.size()) {
     const size_t prev = remain.size();
+
+    /* finds the longest pattern that matches to the remained char */
     for (size_t len = std::min(kPatternMax, remain.size()); len > 0; --len) {
       const auto& p = kPatterns.find(remain.substr(0, len));
       if (p == kPatterns.end()) continue;
 
       const auto& preds = p->second;
       if (first) {
+        /* the first matched pattern may be partly-determined already,
+         * so it's necessary to find the possible input examples */
         for (const auto& itr : preds) {
           if (itr.size() < buffer_.size()) continue;
           if (itr.substr(0, buffer_.size()) == buffer_) {
@@ -260,10 +269,13 @@ void gj::HiraganaMatcher::UpdateExpects_() {
         }
         if (first) continue;
       } else {
+        /* first example is always the shortest */
         expects_ += preds[0];
       }
       remain = remain.substr(len);
     }
+
+    /* if 'remain' is not consumed by this iteration, this means it includes unknown patterns */
     if (prev == remain.size()) {
       Abort(L"invalid pattern: "+remain);
     }

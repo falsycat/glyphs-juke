@@ -42,6 +42,7 @@ class Win32Console : public iConsole {
       gj::Abort("GetStdHandle returned nullptr");
     }
 
+    /* resizes the window */
     CONSOLE_SCREEN_BUFFER_INFOEX size;
     size.cbSize = sizeof(size);
 
@@ -57,8 +58,11 @@ class Win32Console : public iConsole {
     size.srWindow.Bottom = h_ + 1;
     SetConsoleScreenBufferInfoEx(screen_, &size);
 
-    ShowWindow(win_, FALSE);
+    /* restricts resizing by user and maximizing */
     SetWindowLong(win_, GWL_STYLE, GetWindowLong(win_, GWL_STYLE) & ~(WS_SIZEBOX | WS_MAXIMIZEBOX));
+
+    /* shows window */
+    ShowWindow(win_, FALSE);
   }
   ~Win32Console() {
     alive_.store(false);

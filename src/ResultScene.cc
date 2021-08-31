@@ -23,6 +23,7 @@ gj::UniqPtr<gj::iScene> gj::ResultScene::Update(Frame& f) {
   const int32_t correct_y = static_cast<int32_t>(h * .35);
   const int32_t line_y    = static_cast<int32_t>(h * .45);
 
+  /* calculates geometries of all objects to be displayed */
   title_.SetPosition((w-title_.width())/2, title_y);
   f.Add(&title_);
 
@@ -53,6 +54,7 @@ gj::UniqPtr<gj::iScene> gj::ResultScene::Update(Frame& f) {
   guide_.SetPosition((w-guide_.width())/2, static_cast<int32_t>(h*.8));
   f.Add(&guide_);
 
+  /* if the input includes ' ', transitions to TitleScene */
   if (f.input.find(' ') != std::string::npos) {
     return param_.alloc->MakeUniq<TitleScene>(param_);
   }

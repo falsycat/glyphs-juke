@@ -9,7 +9,7 @@ gj::Colorbuffer gj::Font::RenderGlyphs(const std::wstring& str, uint32_t fontsiz
 
   const int baseline = static_cast<int>(ascent * s);
 
-  /* calculate bitmap size */
+  /* calculate bitmap size by getting geometries of all chars */
   float h = 0, w = 2;
   for (auto c : str) {
     int advance, lsb;
@@ -32,6 +32,7 @@ gj::Colorbuffer gj::Font::RenderGlyphs(const std::wstring& str, uint32_t fontsiz
 
   float* dst = buf.ptr();
 
+  /* renders all glyphs and blits the results to the actual buffer */
   float x = 2;
   for (auto c : str) {
     int advance, lsb;

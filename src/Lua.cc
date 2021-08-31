@@ -3,6 +3,7 @@
 #include "thirdparty/lualib.h"
 
 
+/* pushes variant to Lua stack */
 struct LuaPusher {
   LuaPusher() = delete;
   LuaPusher(lua_State* L) : L(L) {
@@ -21,6 +22,8 @@ struct LuaPusher {
  private:
   lua_State* L;
 };
+
+/* takes a value in Lua stack to variant */
 struct LuaTaker {
   LuaTaker() = delete;
   LuaTaker(lua_State* L, int index) : L(L), index_(index) {
@@ -52,6 +55,7 @@ class LuaFunc : public gj::iElementDriver {
   LuaFunc& operator=(const LuaFunc&) = delete;
 
   LuaFunc(lua_State* L, int index) : L(L) {
+    /* registers function and param table*/
     lua_pushvalue(L, index);
     func_ = luaL_ref(L, LUA_REGISTRYINDEX);
 
@@ -63,10 +67,13 @@ class LuaFunc : public gj::iElementDriver {
   }
 
   void Update(Param& param, double t) override {
+    /* pushes registered func */
     lua_rawgeti(L, LUA_REGISTRYINDEX, func_);
 
+    /* pushes current time as the first argument */
     lua_pushnumber(L, t);
-
+    
+    /* pushes param table as the second argument */
     lua_rawgeti(L, LUA_REGISTRYINDEX, table_);
     for (const auto& p : param) {
       lua_pushstring(L, p.first.c_str());
@@ -74,11 +81,13 @@ class LuaFunc : public gj::iElementDriver {
       lua_rawset(L, -3);
     }
 
+    /* calls the function */
     const int ret = lua_pcall(L, 2, 0, 0);
     if (ret) {
       gj::Abort(std::string("Lua error: ")+lua_tostring(L, -1));
     }
 
+    /* copies values from Lua stack into the param map */
     lua_rawgeti(L, LUA_REGISTRYINDEX, table_);
     for (auto& p : param) {
       lua_pushstring(L, p.first.c_str());
@@ -107,6 +116,7 @@ static int CallFactory_(lua_State* L) {
 
   const int n = lua_gettop(L);
 
+  /* takes and validates arguments */
   const lua_Integer st = luaL_checkinteger(L, 1);
   const lua_Integer ed = luaL_checkinteger(L, 2);
   if (st >= ed) {
@@ -120,6 +130,7 @@ static int CallFactory_(lua_State* L) {
   param.period = gj::Period(st, ed);
   param.driver = alloc->MakeUniq<LuaFunc>(L, n);
 
+  /* takes custom params from Lua stack */
   for (int i = 3; i < n; ++i) {
     gj::iElementFactory::Param::CustomValue v;
     if (lua_isnumber(L, i)) {
@@ -146,6 +157,7 @@ gj::Lua::Lua(iAllocator* alloc, ElementStore* store, const FactoryMap& factory, 
   }
   luaopen_math(L);
 
+  /* registers all factories as Lua function */
   for (const auto& f : factory) {
     lua_pushstring(L, f.first.c_str());
 
@@ -157,6 +169,7 @@ gj::Lua::Lua(iAllocator* alloc, ElementStore* store, const FactoryMap& factory, 
     lua_rawset(L, LUA_GLOBALSINDEX);
   }
 
+  /* executes the Lua script */
   if (0 != luaL_loadfile(L, path.c_str())) {
     const char* msg = lua_tostring(L, -1);
     Abort(std::string("luaL_loadfile failure: ") + msg);

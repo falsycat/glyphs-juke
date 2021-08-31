@@ -29,13 +29,20 @@ class ElementStore {
   void Schedule(UniqPtr<iElement>&& e) {
     const uint64_t st = e->period.start;
 
+    /* finds an iterator of an element
+     * that will perform right after the element which is trying to add */
     auto insert_pos = std::find_if(pending_.begin(), pending_.end(),
       [st](auto& x) { return x->period.start > st; });
 
+    /* inserts the new element right before the found element,
+     * this means pending_ stays sorted by time that each element's performance will start */
     pending_.insert(insert_pos, std::move(e));
   }
 
   void Update(Frame& frame, uint64_t now) {
+    /* finds elements whose period is started and
+     * move these elements to performing_ from pending_.
+     * such elements are always on head of pending_ because it's sorted */
     auto pending_beg = pending_.begin();
     auto pending_end = pending_.end();
     auto pending_itr = pending_beg;
@@ -48,6 +55,7 @@ class ElementStore {
     }
     pending_.erase(pending_beg, pending_itr);
 
+    /* updates elements currently performing and deletes expired ones by assigning nullptr */
     for (auto& eptr : performing_) {
       iElement* e = eptr.get();
       if (e->period.end <= now) {

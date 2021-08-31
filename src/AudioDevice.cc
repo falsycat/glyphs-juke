@@ -27,8 +27,11 @@ void gj::AudioDevice::Callback_(ma_device* ma, void* out, const void* in, ma_uin
   AudioDevice* dev = reinterpret_cast<AudioDevice*>(ma->pUserData);
   std::lock_guard _(dev->mtx_);
 
+  /* iterates all of effects and applies them to the current frame */
   for (auto fx : dev->effects_) {
     fx->Apply(reinterpret_cast<float*>(out), framecnt);
   }
+
+  /* count up the time */
   dev->time_.fetch_add(framecnt);
 }

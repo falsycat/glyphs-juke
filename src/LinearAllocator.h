@@ -45,17 +45,20 @@ public:
 
     auto h = reinterpret_cast<Header*>(ptr_);
 
+    /* finds block that has enough unused space at the tail */
     while (h->next) {
       const size_t remain = h->next - h->size;
       if (remain >= whole_size) {
         auto hprev = h;
         auto hnext = reinterpret_cast<Header*>(reinterpret_cast<uint8_t*>(hprev) + hprev->next);
 
+        /* creates new block */
         h = reinterpret_cast<Header*>(reinterpret_cast<uint8_t*>(hprev) + hprev->size);
         h->prev = hprev->size;
         h->next = remain;
         h->size = whole_size;
 
+        /* links the created block with prev and next */
         hprev->next = h->prev;
         hnext->prev = h->next;
 
@@ -74,11 +77,9 @@ public:
     auto hprev = reinterpret_cast<Header*>(uptr - h->prev);
     auto hnext = reinterpret_cast<Header*>(uptr + h->next);
 
+    /* unlinks and drops the block */
     hprev->next += h->next;
     hnext->prev += h->prev;
-
-    // chaos test
-    // std::memset(h, 0xFF, h->next);
   }
 
  private:

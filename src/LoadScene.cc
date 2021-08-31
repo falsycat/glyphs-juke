@@ -10,6 +10,8 @@ gj::LoadScene::LoadScene(Param&& p) :
 }
 
 gj::UniqPtr<gj::iScene> gj::LoadScene::Update(Frame& frame) {
+  /* if PlayScene is prepared and orphan_ is not busy now,
+   * transition to PlayScene by returning its instance */
   if (prod_->HasPrepared() && !(orphan_ && orphan_->IsBusy())) {
     prod_->Start();
     return std::move(prod_);
@@ -17,6 +19,7 @@ gj::UniqPtr<gj::iScene> gj::LoadScene::Update(Frame& frame) {
 
   const uint64_t now = clock_->now();
 
+  /* displays blinking 'Loading...' text */
   if (XorShift(now+1)%10) {
     loading_.SetPosition((frame.w - loading_.width())/2, frame.h/2);
     frame.Add(&loading_);

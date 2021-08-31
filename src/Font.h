@@ -33,9 +33,11 @@ class Font {
     const size_t size = ifs.tellg();
     ifs.seekg(0);
 
+    /* reads all contents from the file */
     buf_ = alloc_->MakeUniqArray<uint8_t>(size);
     ifs.read(reinterpret_cast<char*>(buf_.get()), size);
 
+    /* creates stb_trutype context */
     const int offset = stbtt_GetFontOffsetForIndex(buf_.get(), 0);
     if (!stbtt_InitFont(&stb_, buf_.get(), offset)) {
       Abort("invalid font: "+path);
@@ -52,6 +54,7 @@ class Font {
     Colorbuffer ret(alloc_, w, h);
     float* dst = ret.ptr();
 
+    /* blits all rendered glyphs */
     for (int y = 0; y < h; ++y) {
       for (int x = 0; x < w; ++x) {
         *dst = static_cast<float>(*src*1./UINT8_MAX);

@@ -29,6 +29,7 @@ gj::TitleScene::TitleScene(const Param& p) :
 
   if (err.size()) Abort(std::string(kListPath)+": "+err);
 
+  /* iterates all json objects */
   std::string line;
   auto& list = root.get<::picojson::array>();
   for (auto& e : list) {
@@ -122,6 +123,8 @@ gj::UniqPtr<gj::iScene> gj::TitleScene::Update(Frame& frame) {
     {0, 0, 1},
   };
   M = ::linalg::mul(Mr, M);
+
+  /* applies calculation results */
   logo_.SetMatrix(M);
   frame.Add(&logo_);
 

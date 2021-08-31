@@ -52,6 +52,7 @@ class Music : public iAudioEffect {
     }
     seeking_.store(true);
 
+    /* executes seek function in new thread */
     const size_t frame = static_cast<size_t>(srate_*sec);
     seeker_ = std::thread([this, frame]() {
       if (ma_decoder_seek_to_pcm_frame(&dec_, frame) != MA_SUCCESS) {
@@ -82,6 +83,7 @@ class Music : public iAudioEffect {
 
     const float volume = volume_.load();
 
+    /* applies volume and LPF */
     const size_t n = frames * ch_;
     for (size_t i = 0; i < frames; ++i) {
       volume_actual_ = volume_actual_*kVolumeLpf + volume*(1-kVolumeLpf);

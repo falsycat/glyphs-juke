@@ -29,9 +29,11 @@ class GlyphElementFactory : public iElementFactory {
     const std::string name = std::get<std::string>(param.custom[1]);
     const uint32_t    size = static_cast<uint32_t>(std::get<double>(param.custom[2]));
 
+    /* finds font from cache and renders text */
     auto& font = FindOrCreateFont(name);
     auto  tex  = std::move(font.RenderGlyphs(ConvertStrToWstr(text), size));  /* TODO */
 
+    /* pass TextureElement the rendered texture */
     return alloc_->MakeUniq<TextureElement>(
       param.period, std::move(tex), std::move(param.driver));
   }

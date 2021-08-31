@@ -18,6 +18,8 @@ void gj::Texture::Draw(Colorbuffer& fb) const {
   for (size_t i = 0; i < 4; ++i) {
     p[i] = ::linalg::mul(mat_, p[i]);
   }
+
+  /* calculates coordinates of each edge of rect covering the draw area in dst */
   const double pl = std::min({p[0].x, p[1].x, p[2].x, p[3].x})-.1;
   const double pr = std::max({p[0].x, p[1].x, p[2].x, p[3].x})+.1;
   const double pu = std::max({p[0].y, p[1].y, p[2].y, p[3].y})+.1;
@@ -25,6 +27,7 @@ void gj::Texture::Draw(Colorbuffer& fb) const {
   const double pw = pr - pl;
   const double ph = pu - pb;
 
+  /* converts the dst edge coordinates to integers */
   const int32_t pli = static_cast<int32_t>((pl + 1) / 2 * w);
   const int32_t pri = static_cast<int32_t>((pr + 1) / 2 * w);
   const int32_t pui = static_cast<int32_t>((pu + 1) / 2 * h);
@@ -42,11 +45,14 @@ void gj::Texture::Draw(Colorbuffer& fb) const {
   for (size_t i = 0; i < 4; ++i) {
     q[i] = ::linalg::mul(invmat_, q[i]);
   }
+
+  /* calculates coordinates of each edge of rect covering the draw area in src */
   const double ql = std::min({q[0].x, q[1].x, q[2].x, q[3].x});
   const double qr = std::max({q[0].x, q[1].x, q[2].x, q[3].x});
   const double qu = std::max({q[0].y, q[1].y, q[2].y, q[3].y});
   const double qb = std::min({q[0].y, q[1].y, q[2].y, q[3].y});
-
+  
+  /* converts the src edge coordinates to integers */
   const double qldx = q[0].x - q[1].x;
   const double qrdx = q[3].x - q[2].x;
   const double qldy = q[0].y - q[1].y;

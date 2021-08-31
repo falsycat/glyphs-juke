@@ -31,12 +31,15 @@ class Text : public WritableBase {
     int32_t x = x_, y = y_;
     if (y >= h) return;
 
+    /* copies text to the textbuffer */
     const size_t len = entity_.size();
     for (size_t i = 0; i < len; ++i) {
       if (x <  0) continue;
       if (x >= w) return;
 
       ptr[x+y*w] = entity_[i];
+
+      /* multi-byte chars requires space of two chars */
       x += (entity_[i] > UINT8_MAX)? 2: 1;
     }
   }
