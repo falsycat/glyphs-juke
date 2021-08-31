@@ -11,27 +11,41 @@ static void CalcChar(CHAR_INFO& c, float color, uint16_t text) {
     BACKGROUND_INTENSITY | FOREGROUND_RED,
     BACKGROUND_RED | FOREGROUND_INTENSITY,
   };
+  constexpr uint8_t with_text_attrs[] = {
+    BACKGROUND_INTENSITY,
+    FOREGROUND_INTENSITY,
+    BACKGROUND_RED | FOREGROUND_INTENSITY,
+    BACKGROUND_INTENSITY | FOREGROUND_RED,
+  };
 
   constexpr size_t char_expr_count = sizeof(chars)/sizeof(chars[0])-1;
   constexpr size_t attr_expr_count = sizeof(attrs)/sizeof(attrs[0]);
 
   constexpr size_t reso = char_expr_count*attr_expr_count;
 
-  /* post effect */
+  /* posteffect */
   color = static_cast<float>(std::pow(color, 1.9));
 
+  /* clamps alpha */
   int8_t a = static_cast<int8_t>(color*reso);
   if (a >= reso) a = reso-1;
   if (a <  0)    a = 0;
 
+  /* calculates an index of attr from the alpha */
   size_t ci = a%char_expr_count;
   size_t ai = a/char_expr_count;
   if (ai%2 == 1) ci = char_expr_count-ci-1;
 
+  /* assigns char and attr, but switches a set of attr depending on whether there's text */
   c.Char.UnicodeChar = chars[ci];
-  c.Attributes       = attrs[ai];
-
-  if (text) c.Char.UnicodeChar = text;
+  if (text) {
+    /*  if color of this pixel is expressed by a thick char (ci is bigger),
+     * uses a attr set specialized in text to make it more visible. */
+    c.Attributes       = ci < char_expr_count/3*2? attrs[ai]: with_text_attrs[ai];
+    c.Char.UnicodeChar = text;
+  } else {
+    c.Attributes = attrs[ai];
+  }
 }
 
 void gj::Win32Console::main() {
@@ -44,6 +58,7 @@ void gj::Win32Console::main() {
         ShowWindow(win_, TRUE);
       }
 
+      /* throws away the cursor */
       constexpr CONSOLE_CURSOR_INFO cursor{ 1, FALSE };
       SetConsoleCursorInfo(screen_, &cursor);
 
@@ -73,8 +88,6 @@ void gj::Win32Console::main() {
         }
       }
 
-
-
       /* write output */
       CHAR_INFO* c = chars_.get();
       {  /* critical section */
@@ -99,7 +112,8 @@ void gj::Win32Console::main() {
           }
         }
       }
-
+      
+      /* writes calculated pixels into the front buffer */
       const COORD size = { static_cast<SHORT>(w_), static_cast<SHORT>(h_), };
       const COORD pos  = { 0, 0, };
       SMALL_RECT  rc   = { 0, 0, static_cast<SHORT>(w_), static_cast<SHORT>(h_), };
@@ -111,6 +125,6 @@ void gj::Win32Console::main() {
         shown = false;
       }
     }
-    Sleep(30);
+    Sleep(10);
   }
 }
