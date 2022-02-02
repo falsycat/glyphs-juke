@@ -1,0 +1,31 @@
+name: build
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        mode:
+          - { upper: Debug,   lower: debug }
+          - { upper: Release, lower: release  }
+
+    name: ${{ matrix.mode.lower }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x86_64
+
+      - name: build
+        run : msbuild GlyphsJuke.sln /t:build /p:configuration=${{ matrix.mode.upper }}
+
+      - name: 'uploading artifacts'
+        uses: actions/upload-artifact@v2
+        with:
+          name: gj-windows-${{ matrix.mode.lower }}
+          path: ./
